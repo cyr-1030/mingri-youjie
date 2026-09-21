@@ -68,7 +68,6 @@
 .daily-card-top { display: flex; justify-content: space-between; color: var(--accent); font-size: 19rpx; letter-spacing: .09em; }
 .daily-card-title, .daily-detail-title { font-family: 'Songti SC', serif; font-size: 36rpx; color: var(--accent); }
 .daily-card-action { font-size: 24rpx; }
-.daily-card-basis { color: #798477; font-size: 19rpx; line-height: 1.5; }
 .daily-detail { background: var(--tint); }
 .styling-detail { background: linear-gradient(145deg, #fcfaf5, var(--tint)); }
 .styling-material { color: #867862; font-size: 21rpx; }
@@ -200,10 +199,16 @@
 .star-sign { width: 38rpx; height: 38rpx; border-radius: 50%; background: #fcfaf5; color: #9b8468; font-size: 26rpx; }
 .star-body { width: 43rpx; height: 43rpx; border: 1rpx solid #f3e8d2; border-radius: 50%; background: var(--accent); color: #f8ecd2; font-size: 26rpx; box-shadow: 0 3rpx 10rpx #1d3e2e33; }
 .star-wheel-center { position: absolute; left: 50%; top: 50%; width: 82rpx; height: 82rpx; transform: translate(-50%, -50%); border: 1rpx solid #c7b98f; border-radius: 50%; display: flex; align-items: center; justify-content: center; background: #f7f4e9; color: var(--accent); font-family: 'Songti SC', serif; font-size: 40rpx; }
+.star-reading { display: flex; flex-direction: column; gap: 16rpx; }
+.star-intro { color: #78857b; font-size: 20rpx; line-height: 1.55; }
 .star-list { border-top: 1rpx solid #ded9cb; }
-.star-row { display: flex; justify-content: space-between; padding: 17rpx 5rpx; border-bottom: 1rpx solid #e8e3d8; color: #647367; font-size: 23rpx; }
-.star-row text:last-child { color: var(--accent); }
-.star-caption { color: #889287; font-size: 19rpx; line-height: 1.5; margin-top: 19rpx; }
+.star-row { display: grid; grid-template-columns: 145rpx minmax(0, 1fr); gap: 18rpx; padding: 17rpx 5rpx; border-bottom: 1rpx solid #e8e3d8; color: #647367; font-size: 22rpx; }
+.star-row > view { display: flex; flex-direction: column; gap: 4rpx; }
+.star-name { color: var(--accent); font-family: 'Songti SC', serif; font-size: 25rpx; }
+.star-role { color: #a1855f; font-size: 17rpx; }
+.star-row-copy { color: var(--accent); }
+.star-row-reading { color: #718075; font-size: 19rpx; line-height: 1.45; }
+.star-summary { display: flex; flex-direction: column; gap: 7rpx; padding: 18rpx; border-radius: 9rpx; background: var(--soft); color: #3e5b49; font-size: 21rpx; line-height: 1.5; }
 .star-unavailable { display: flex; flex-direction: column; align-items: center; gap: 14rpx; padding: 47rpx 30rpx; border: 1rpx solid #d8d1c1; border-radius: 15rpx; background: #fcfaf5; color: #597060; line-height: 1.5; font-size: 22rpx; text-align: center; }
 .star-unavailable-icon { color: #b19a72; font-size: 53rpx; }
 .star-unavailable text:last-child { font-size: 19rpx; color: #8c968b; }
@@ -230,12 +235,12 @@
 .wardrobe-row button { margin: 0; padding: 0 14rpx; background: transparent; color: #96675c; font-size: 21rpx; }
 .empty-wardrobe { padding: 45rpx 20rpx; color: #859185; text-align: center; font-size: 23rpx; }
 .wardrobe-gap-head { margin-top: 42rpx; }
-.wardrobe-gap-note { margin: -6rpx 0 18rpx; }
-.wardrobe-gap-card { margin-top: 14rpx; padding: 22rpx; display: flex; flex-direction: column; gap: 10rpx; border: 1rpx solid #d7d1c3; border-radius: 12rpx; background: #fcfaf5; color: #5e6d62; font-size: 20rpx; line-height: 1.5; }
-.wardrobe-gap-card > view { display: flex; align-items: baseline; justify-content: space-between; gap: 12rpx; }
+.wardrobe-gap-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12rpx; margin-top: 14rpx; }
+.wardrobe-gap-card { min-width: 0; min-height: 235rpx; padding: 20rpx; display: flex; flex-direction: column; gap: 10rpx; border: 1rpx solid #d7d1c3; border-radius: 12rpx; background: #fcfaf5; color: #5e6d62; font-size: 20rpx; line-height: 1.5; }
+.wardrobe-gap-index { color: #b49a70; font-family: serif; font-size: 18rpx; letter-spacing: .1em; }
 .wardrobe-gap-category { color: #9a7d55; font-size: 18rpx; }
-.wardrobe-gap-name { color: var(--accent); font-family: 'Songti SC', serif; font-size: 27rpx; text-align: right; }
-.wardrobe-gap-card button { align-self: flex-start; min-height: 52rpx; margin: 2rpx 0 0; padding: 0 16rpx; border: 1rpx solid var(--accent); border-radius: 7rpx; background: transparent; color: var(--accent); font-size: 20rpx; line-height: 52rpx; }
+.wardrobe-gap-name { flex: 1; color: var(--accent); font-family: 'Songti SC', serif; font-size: 27rpx; text-align: left; }
+.wardrobe-gap-card button { align-self: flex-start; min-height: 52rpx; margin: auto 0 0; padding: 0 16rpx; border: 1rpx solid var(--accent); border-radius: 7rpx; background: transparent; color: var(--accent); font-size: 20rpx; line-height: 52rpx; }
 .wardrobe-gap-empty { padding: 28rpx 14rpx; }
 .bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; z-index: 10; height: 118rpx; padding-bottom: env(safe-area-inset-bottom); display: flex; background: #f7f4ed; border-top: 1rpx solid #ddd5c3; box-shadow: 0 -7rpx 20rpx #283f2920; }
 .nav-item { width: 20%; height: 112rpx; padding: 8rpx 0; margin: 0; display: flex; align-items: center; flex-direction: column; justify-content: center; gap: 3rpx; background: transparent; color: #909589; font-size: 19rpx; border-radius: 0; }

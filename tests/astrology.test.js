@@ -1,6 +1,8 @@
 const test = require('node:test')
 const assert = require('node:assert/strict')
 const { starChartForBirth, zodiacPosition } = require('../lib/astrology')
+const { astrologyProfile } = require('../lib/astro-guidance')
+const { buildPlan } = require('../lib/plan')
 
 test('已知中国出生时刻生成五颗天体和可绘制的十二星座轮', () => {
   const chart = starChartForBirth({ date: '1996-06-18', time: '10:30', location: { countryCode: 'CN' } })
@@ -39,4 +41,17 @@ test('黄经落点跨越 0 度时仍对应正确星座', () => {
   assert.deepEqual(zodiacPosition(360.5), { longitude: 0.5, signIndex: 0, sign: '白羊', degreeInSign: 0.5, wheelAngle: 0.5 })
   assert.equal(zodiacPosition(-1).sign, '双鱼')
   assert.throws(() => starChartForBirth({ date: '1996-02-30', time: '10:30', location: { countryCode: 'CN' } }), /日期无效/)
+})
+
+test('五颗主要行星生成用户可读提示并进入穿搭方案', () => {
+  const chart = starChartForBirth({ date: '1996-06-18', time: '10:30', location: { countryCode: 'CN' } })
+  const astro = astrologyProfile(chart)
+  assert.equal(astro.cards.length, 5)
+  assert.deepEqual(astro.cards.map(card => card.role), ['核心倾向', '情绪需要', '表达方式', '审美偏好', '行动方式'])
+  assert.match(astro.summary, /核心偏向/)
+  const base = buildPlan({ styles: ['soft'], occasion: '通勤', weather: { temp: 22, rain: 'none' } })
+  const personalized = buildPlan({ styles: ['soft'], occasion: '通勤', weather: { temp: 22, rain: 'none' }, astro })
+  assert.notEqual(personalized.styling, base.styling)
+  assert.notEqual(personalized.makeup, base.makeup)
+  assert.equal(personalized.astroAction, astro.actionCue)
 })

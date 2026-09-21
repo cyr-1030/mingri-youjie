@@ -7,6 +7,7 @@ const { recommendCreators } = require('../../lib/creator-match.js')
 const { dailyFor } = require('../../lib/daily.js')
 const { normalizeRegion, getRegionColumns, getRegionByIndices, getRegionIndices } = require('../../lib/regions.js')
 const { starChartForBirth } = require('../../lib/astrology.js')
+const { astrologyProfile } = require('../../lib/astro-guidance.js')
 const { GROUPS: WARDROBE_GROUPS, indicesForCategory, columnsForGroup, categoryAt } = require('../../lib/wardrobe.js')
 
 const STORE = 'mingriyoujie-mvp-v1'
@@ -45,12 +46,9 @@ function readingFor(state, theme, almanac) {
   const guide = object.guide
   const wants = theme.states[state.answers[2]]
   const reacts = theme.reactions[state.answers[1]]
-  let calendarCue = '黄历宜忌仅作传统文化参考，明日行动以真实日程与条件为准。'
-  if (state.themeId === 'travel' && almanac.yi.includes('出行')) calendarCue = '传统黄历将「出行」列在今日宜项；出门安排仍请以天气和路线为准。'
-  if (state.themeId === 'travel' && almanac.ji.includes('出行')) calendarCue = '传统黄历将「出行」列在今日忌项；如需外出，仍请按真实日程、天气与路线安排。'
   return {
     object, title: `${object.sign} · ${object.meaning}`, summary: guide[0], do: guide[1], avoid: guide[2],
-    wants, reacts, calendarCue, first: theme.questions[0][1][state.answers[0]]
+    wants, reacts, first: theme.questions[0][1][state.answers[0]]
   }
 }
 
@@ -71,8 +69,7 @@ function chartProfileFor(chart) {
   return {
     image: ELEMENT_IDEA[chart.element].image,
     supportedBy: ELEMENT_LABEL[supportedBy], supports: ELEMENT_LABEL[supports],
-    lightText: light.map(id => ELEMENT_LABEL[id]).join('、'),
-    note: '表层五行计数只是结构信息，不能据此判断传统命理的喜用神；界面配色不决定每日穿搭。'
+    lightText: light.map(id => ELEMENT_LABEL[id]).join('、')
   }
 }
 
@@ -142,7 +139,7 @@ Page({
       } catch (e) { chart = null }
     }
     let starChart = null
-    if (s.page === 'chart' && s.birth) {
+    if (s.birth) {
       try {
         starChart = starChartForBirth({ date: s.birth.date, time: s.birth.time,
           location: birthRegion || { countryCode: 'OVERSEAS' } })
@@ -160,6 +157,8 @@ Page({
       starChart.bodies = starChart.bodies.map(body => ({ ...body,
         degreeInSign: Math.round(body.degreeInSign * 10) / 10 }))
     }
+    const astroProfile = astrologyProfile(starChart)
+    if (starChart && starChart.status === 'ready' && astroProfile) starChart.bodies = astroProfile.cards
     const chartProfile = chartProfileFor(chart)
     const element = chart ? chart.element : 'neutral'
     const elementBars = chart ? Object.keys(ELEMENT_LABEL).map(id => ({
@@ -180,7 +179,7 @@ Page({
         sourceLabel: forecast ? '当地预报' : '暂无天气数据'
       }, wardrobe: s.wardrobe,
       environment: s.environment, occasion: s.occasion,
-      city: s.city, daily, ageBand: s.birth ? ageBand(s.birth.date) : s.ageRange,
+      city: s.city, daily, astro: astroProfile, ageBand: s.birth ? ageBand(s.birth.date) : s.ageRange,
       themeId: s.themeId, objectAction: reading.object.action, reading
     }) : null
     const inspirations = recommendInspirations({ styleIds: s.styles, plan, occasion: s.occasion })
@@ -201,7 +200,7 @@ Page({
     const currentRegionIndices = s.currentRegionIndices || [0, 0]
     this.setData({
       page: s.page, themeClass: `theme-${element}`, theme, themes, nav,
-      dateMode: s.dateMode, targetDate, almanac, chart, chartProfile, starChart, daily,
+      dateMode: s.dateMode, targetDate, almanac, chart, chartProfile, starChart, astroProfile, daily,
       wheelSigns, wheelBodies, starSpokes: [0, 30, 60, 90, 120, 150], elementBars,
       elementLabel: chart ? ELEMENT_LABEL[element] : '',
       yiText: almanac.yi.join(' · '), jiText: almanac.ji.join(' · '),
