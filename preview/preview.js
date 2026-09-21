@@ -96,7 +96,10 @@ window.wx = {
   showToast: ({ title }) => toast(title),
   showModal: ({ title, content, success }) => success({ confirm: window.confirm(`${title}\n${content}`) }),
   showLoading: ({ title }) => toast(title), hideLoading: () => {},
-  pageScrollTo: () => { root.scrollTop = 0 },
+  pageScrollTo: () => {
+    root.scrollTop = 0
+    window.scrollTo({ top: 0, behavior: 'auto' })
+  },
   chooseMedia: chooseBrowserImage,
   chooseImage: chooseBrowserImage,
   saveFile: ({ tempFilePath, success }) => success({ savedFilePath: tempFilePath }),
@@ -296,7 +299,7 @@ function build(node, context, skipLoop = false) {
   if (element.classList.contains('sheet-image') && context.item && Number.isInteger(context.item.tile)) {
     element.style.left = '0'
     element.style.top = '0'
-    element.style.transform = `translate(${-((context.item.tile % 3) * 100)}px, ${-(Math.floor(context.item.tile / 3) * 100)}px)`
+    element.style.transform = `translate(calc(var(--tile-size, 100px) * -${context.item.tile % 3}), calc(var(--tile-size, 100px) * -${Math.floor(context.item.tile / 3)}))`
     element.alt = `选物图 ${context.item.tile + 1}`
   }
   for (const [binding, eventName] of [['bindtap', 'click'], ['bindinput', 'input'], ['bindblur', 'blur'], ['bindchange', 'change']]) {
@@ -325,6 +328,8 @@ function build(node, context, skipLoop = false) {
 function render() {
   if (!sourceTree || !page) return
   const scroll = root.scrollTop
+  document.body.dataset.page = page.data.page || 'home'
+  document.body.dataset.theme = String(page.data.themeClass || 'neutral').replace(/^theme-/, '')
   const fragment = build(sourceTree, page.data)
   root.replaceChildren(fragment)
   root.scrollTop = scroll
