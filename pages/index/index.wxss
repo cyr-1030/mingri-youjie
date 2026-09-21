@@ -47,7 +47,7 @@
 .object-grid { display: flex; justify-content: space-between; gap: 10rpx; margin: 44rpx 0 28rpx; }
 .object-card { width: 31.9%; height: 285rpx; padding: 8rpx; margin: 0; background: #fcfaf5; border: 1rpx solid #bfc0ae; border-radius: 14rpx; display: flex; flex-direction: column; align-items: center; justify-content: center; }
 .object-frame { width: 200rpx; height: 200rpx; position: relative; overflow: hidden; border-radius: 7rpx; background: #eaece2; }
-.sheet-image { position: absolute; width: 600rpx; height: 600rpx; max-width: none; }
+.object-image { display: block; width: 100%; height: 100%; }
 .object-num { font-size: 18rpx; color: #8e8d79; letter-spacing: .13em; margin-top: 15rpx; }
 .reading-card { position: relative; overflow: hidden; border: 1rpx solid #ab9d78; background: radial-gradient(circle at 50% 20%, var(--accent-2), var(--dark) 72%); border-radius: 18rpx; color: #f8efda; padding: 27rpx 34rpx 29rpx; text-align: center; }
 .reading-card::before { content: ''; position: absolute; inset: 14rpx; border: 1rpx solid #e4d3a45e; border-radius: 9rpx; pointer-events: none; }
@@ -73,6 +73,8 @@
 .styling-detail { background: linear-gradient(145deg, #fcfaf5, var(--tint)); }
 .styling-material { color: #867862; font-size: 21rpx; }
 .action-card { border-left: 5rpx solid var(--accent); }
+.action-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12rpx; margin-top: 18rpx; }
+.action-grid .action-card { min-width: 0; min-height: 170rpx; margin: 0; padding: 22rpx; }
 .almanac { color: #5f6e62; font-size: 22rpx; margin-top: 28rpx; }
 .almanac .small-note { text-align: left; margin: 8rpx 0 0; font-size: 19rpx; }
 .field { margin: 32rpx 0; }
@@ -107,22 +109,27 @@
 .outfit-caption text:first-child { overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
 .outfit-caption text:last-child { color: #a28b63; font-size: 17rpx; }
 .outfit-board-note { display: block; margin-top: 17rpx; color: #847f73; font-size: 19rpx; line-height: 1.45; }
-.plan-intro { display: flex; flex-direction: column; gap: 8rpx; padding: 22rpx 3rpx; color: #647368; font-size: 22rpx; line-height: 1.45; }
-.plan-weather-source { margin: 0 0 20rpx 3rpx; }
+.plan-toolbar { display: flex; align-items: center; justify-content: space-between; gap: 16rpx; margin: 10rpx 0 22rpx; }
+.plan-toolbar .weather-attribution { margin: 0; }
+.plan-summary-grid, .plan-guide-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12rpx; margin-top: 22rpx; }
+.plan-summary-card, .plan-guide-card { min-width: 0; padding: 22rpx; border: 1rpx solid #d9d1bf; border-radius: 12rpx; background: #fcfaf5; color: #334b3d; font-size: 22rpx; line-height: 1.5; display: flex; flex-direction: column; gap: 9rpx; }
+.plan-summary-card { border-top: 5rpx solid var(--accent); }
+.plan-guide-card:first-child { background: linear-gradient(145deg, #fcfaf5, var(--tint)); }
+.prep-grid, .creator-grid, .inspiration-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12rpx; }
 .reason-panel { padding: 21rpx 24rpx; background: var(--tint); border: 1rpx solid #d9d1bf; border-radius: 11rpx; }
 .reason-row { display: flex; gap: 17rpx; padding: 10rpx 0; color: #43564b; font-size: 21rpx; line-height: 1.4; }
 .reason-row text:first-child { flex: none; width: 91rpx; color: var(--accent); }
 .plan-title { font-family: 'Songti SC', serif; color: var(--accent); font-size: 37rpx; }
-.plan-context { color: #918e7f; font-size: 20rpx; }
+.plan-context { margin-top: 8rpx; color: #918e7f; font-size: 20rpx; }
 .item-list { border-top: 1rpx solid #d6d2c4; }
 .look-item { min-height: 87rpx; display: flex; align-items: center; gap: 13rpx; border-bottom: 1rpx solid #ddd9cc; font-size: 24rpx; }
 .item-label { width: 78rpx; color: #97815f; font-size: 21rpx; }
 .item-value { flex: 1; color: #2f4537; }
 .owned { background: var(--tint); color: var(--accent); border-radius: 5rpx; font-size: 18rpx; padding: 5rpx 9rpx; }
 .placeholder { color: #8b8170; border: 1rpx solid #d9d1bf; border-radius: 5rpx; font-size: 18rpx; padding: 4rpx 8rpx; }
-.prep-item { display: flex; gap: 14rpx; color: #3b5142; font-size: 23rpx; margin: 17rpx 0; line-height: 1.5; }
+.prep-item { display: flex; gap: 14rpx; color: #3b5142; font-size: 23rpx; margin: 0; padding: 15rpx 0; line-height: 1.5; }
 .prep-item text:first-child { color: var(--accent); }
-.creator-card { margin: 14rpx 0; padding: 22rpx; border: 1rpx solid #d7d1c3; border-radius: 14rpx; background: #fcfaf5; display: flex; flex-direction: column; gap: 11rpx; }
+.creator-card { margin: 0; padding: 22rpx; border: 1rpx solid #d7d1c3; border-radius: 14rpx; background: #fcfaf5; display: flex; flex-direction: column; gap: 11rpx; }
 .creator-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 15rpx; }
 .creator-head > view { min-width: 0; display: flex; align-items: center; flex-wrap: wrap; gap: 9rpx; }
 .creator-name { color: var(--accent); font-family: 'Songti SC', serif; font-size: 29rpx; }
@@ -132,7 +139,7 @@
 .creator-tags { display: flex; flex-wrap: wrap; gap: 8rpx; }
 .creator-tags text { padding: 5rpx 9rpx; border: 1rpx solid #d7d1c3; border-radius: 999rpx; color: #76664f; font-size: 17rpx; }
 .creator-reason { color: #828a7e; font-size: 19rpx; line-height: 1.45; }
-.inspiration-card { display: flex; overflow: hidden; margin: 14rpx 0; border: 1rpx solid #d7d1c3; border-radius: 14rpx; background: #fcfaf5; }
+.inspiration-card { display: flex; overflow: hidden; margin: 0; border: 1rpx solid #d7d1c3; border-radius: 14rpx; background: #fcfaf5; }
 .inspiration-art { flex: 0 0 116rpx; width: 116rpx; min-height: 225rpx; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 13rpx; color: var(--accent); background: linear-gradient(155deg, var(--tint), #eee6d9); font-size: 19rpx; letter-spacing: .12em; }
 .inspiration-sigil { width: 75rpx; height: 75rpx; display: flex; align-items: center; justify-content: center; border: 1rpx solid var(--accent-2); border-radius: 50%; font-family: 'Songti SC', serif; font-size: 48rpx; line-height: 1; }
 .inspiration-content { min-width: 0; flex: 1; display: flex; flex-direction: column; gap: 9rpx; padding: 21rpx 22rpx 19rpx; }

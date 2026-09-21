@@ -190,8 +190,7 @@ Page({
     const question = theme.questions[s.qIndex] || theme.questions[0]
     const questionOptions = question[1].map((text, index) => ({ text, index, selected: s.answers[s.qIndex] === index }))
     const objects = theme.objects.map((o, index) => ({
-      ...o, index, sheetSrc: `../../assets/object-sheet-${o.sheet}.jpg`,
-      imageStyle: `left:-${(o.tile % 3) * 200}rpx;top:-${Math.floor(o.tile / 3) * 200}rpx;`
+      ...o, index, tileSrc: `../../assets/objects/s${o.sheet}-t${o.tile}.jpg`
     }))
     const book = s.bookIndex >= 0 ? content.book[s.bookIndex] : null
     const styles = STYLES.map(x => ({ ...x, selected: s.styles.includes(x.id), priority: s.styles.indexOf(x.id) + 1 }))

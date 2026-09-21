@@ -328,7 +328,9 @@ test('真实黄历由日期计算，UI 文案注明来源，素材路径均存�
   for (const id of content.order) {
     for (const object of content.themes[id].objects) {
       const file = path.join(__dirname, '..', 'assets', `object-sheet-${object.sheet}.jpg`)
+      const tile = path.join(__dirname, '..', 'assets', 'objects', `s${object.sheet}-t${object.tile}.jpg`)
       assert.ok(fs.existsSync(file), file)
+      assert.ok(fs.existsSync(tile), tile)
       assert.ok(object.tile >= 0 && object.tile < 9)
     }
   }

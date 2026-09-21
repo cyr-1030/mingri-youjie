@@ -275,9 +275,9 @@ function build(node, context, skipLoop = false) {
       })
       element.value = value || '0'
     } else {
-      // 桌面浏览器的系统日期分段控件很难直接输入，预览改用格式明确的文本框。
-      element.type = 'text'
-      element.placeholder = pickerMode === 'date' ? 'YYYY-MM-DD，例如 1998-05-20' : 'HH:MM，例如 08:30（可留空）'
+      element.type = pickerMode
+      element.min = node.getAttribute('start') || ''
+      element.max = node.getAttribute('end') || ''
       element.value = value
       element.dataset.pickerMode = pickerMode
     }
@@ -296,11 +296,8 @@ function build(node, context, skipLoop = false) {
     if (name === 'class') { element.className = value; continue }
     element.setAttribute(name, value)
   }
-  if (element.classList.contains('sheet-image') && context.item && Number.isInteger(context.item.tile)) {
-    element.style.left = '0'
-    element.style.top = '0'
-    element.style.transform = `translate(calc(var(--tile-size, 100px) * -${context.item.tile % 3}), calc(var(--tile-size, 100px) * -${Math.floor(context.item.tile / 3)}))`
-    element.alt = `选物图 ${context.item.tile + 1}`
+  if (element.classList.contains('object-image') && context.item) {
+    element.alt = context.item.name || `选物图 ${context.item.index + 1}`
   }
   for (const [binding, eventName] of [['bindtap', 'click'], ['bindinput', 'input'], ['bindblur', 'blur'], ['bindchange', 'change']]) {
     const method = node.getAttribute(binding)
