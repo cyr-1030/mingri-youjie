@@ -75,6 +75,23 @@
       <button class="primary" data-page="conditions" bindtap="navigate">补充天气与场合 →</button>
     </block>
 
+    <block wx:elif="{{page === 'book'}}">
+      <view class="eyebrow">给此刻一个提示</view>
+      <view class="page-title">先在心里想一件事。</view>
+      <view class="page-subtitle">停三秒，带着你的问题翻开一页。</view>
+      <view class="book-cover public-book {{book ? 'opened' : ''}}" bindtap="flipBook">
+        <view class="book-inner" wx:if="{{book}}">
+          <text class="book-star">✦</text><text class="book-answer">{{book[0]}}</text>
+          <view class="book-divider"></view><text class="book-action">现在可以做：{{book[1]}}</text>
+        </view>
+        <view class="book-inner" wx:else>
+          <text class="book-overline">THE LITTLE BOOK</text><text class="book-star">✦</text>
+          <text class="book-label">答案书</text><text class="book-action">轻点封面</text>
+        </view>
+      </view>
+      <button class="primary" bindtap="flipBook">{{book ? '再翻一页' : '翻开一页'}}</button>
+    </block>
+
     <block wx:elif="{{page === 'conditions'}}">
       <view class="eyebrow">让建议更贴近生活</view>
       <view class="page-title">再补充几个条件。</view>
@@ -105,20 +122,24 @@
 
     <block wx:elif="{{page === 'zodiac'}}">
       <view class="eyebrow">个性偏好</view>
-      <view class="page-title">选择你的星座。</view>
-      <view class="page-subtitle">用于补充穿搭细节和行动节奏；随时可以更换。</view>
+      <view class="page-title">找到你的星座。</view>
+      <view class="page-subtitle">把性格偏好变成一处穿搭细节，随时可以更换。</view>
+      <view class="zodiac-art-hero">
+        <image src="../../assets/public/zodiac-mucha.jpg" mode="aspectFill"></image>
+        <view class="zodiac-art-copy"><text>你的风格线索</text><text>从熟悉的性格倾向里，挑一处最适合今天的表达。</text></view>
+      </view>
       <view class="zodiac-grid">
         <button class="zodiac-card {{item.selected ? 'active' : ''}}" wx:for="{{zodiacSigns}}" wx:key="id" data-id="{{item.id}}" bindtap="chooseZodiac">
-          <text class="zodiac-symbol">{{item.symbol}}</text><text>{{item.name}}</text>
+          <text class="zodiac-en">{{item.short}}</text><text class="zodiac-name">{{item.name}}</text><text class="zodiac-date">{{item.date}}</text>
         </button>
       </view>
       <view class="zodiac-profile" wx:if="{{zodiacProfile}}">
-        <view class="zodiac-profile-head"><text>{{zodiacProfile.symbol}}</text><text>{{zodiacProfile.name}}</text></view>
+        <view class="zodiac-profile-head"><text>{{zodiacProfile.name}}</text><text>今日风格提示</text></view>
         <text class="zodiac-summary">{{zodiacProfile.summary}}</text>
         <view class="zodiac-profile-grid">
-          <view><text class="card-label">穿搭细节</text><text>{{zodiacProfile.styleCue}}</text></view>
-          <view><text class="card-label">妆容重点</text><text>{{zodiacProfile.beautyCue}}</text></view>
-          <view><text class="card-label">行动节奏</text><text>{{zodiacProfile.actionCue}}</text></view>
+          <view><text class="zodiac-row-index">01</text><view><text class="card-label">穿搭细节</text><text>{{zodiacProfile.styleCue}}</text></view></view>
+          <view><text class="zodiac-row-index">02</text><view><text class="card-label">妆容重点</text><text>{{zodiacProfile.beautyCue}}</text></view></view>
+          <view><text class="zodiac-row-index">03</text><view><text class="card-label">行动节奏</text><text>{{zodiacProfile.actionCue}}</text></view></view>
         </view>
       </view>
       <button class="primary" wx:if="{{reading}}" data-page="conditions" bindtap="navigate">继续完善穿搭 →</button>
@@ -131,27 +152,31 @@
         <text class="plan-name">{{plan.title}}</text><text class="plan-mood">{{plan.mood}}</text>
         <text class="plan-context">{{city || '城市未选'}} · {{plan.weatherText}} · {{occasion}} · {{environment}}</text>
       </view>
-      <view class="plan-summary-grid" wx:if="{{plan}}">
-        <view class="plan-summary-card"><text class="card-label">心理线索</text><text>{{reading.summary}}</text></view>
-        <view class="plan-summary-card"><text class="card-label">场合重点</text><text>{{plan.focus}}</text></view>
-        <view class="plan-summary-card"><text class="card-label">个性偏好</text><text>{{zodiacProfile ? zodiacProfile.actionCue : '按测试选择与实际条件生成'}}</text></view>
+      <view class="plan-story" wx:if="{{plan}}">
+        <text class="plan-story-kicker">今天的状态</text><text class="plan-story-main">{{reading.summary}}</text>
+        <view class="plan-story-tags"><text>{{plan.focus}}</text><text wx:if="{{zodiacProfile}}">{{zodiacProfile.name}} · {{zodiacProfile.actionCue}}</text></view>
       </view>
       <view class="outfit-board" wx:if="{{plan}}">
-        <view class="outfit-board-head"><text>今天穿什么</text><text>{{plan.items.length}} 件</text></view>
+        <view class="outfit-board-head"><view><text>今天穿什么</text><text class="outfit-board-sub">按本次条件组合的搭配画板</text></view><text>{{plan.items.length}} 件</text></view>
         <view class="outfit-grid">
           <view class="outfit-tile" wx:for="{{plan.items}}" wx:key="label">
-            <image wx:if="{{item.photo}}" src="{{item.photo}}" mode="aspectFill"></image><view wx:else class="outfit-empty">{{item.label}}</view>
+            <image wx:if="{{item.photo}}" src="{{item.photo}}" mode="aspectFill"></image>
+            <view wx:else class="fashion-sketch fashion-{{item.visualType}} tone-{{item.visualTone}} pattern-{{item.visualPattern}}">
+              <view class="sketch-shadow"></view><view class="sketch-piece piece-a"></view><view class="sketch-piece piece-b"></view><view class="sketch-piece piece-c"></view><view class="sketch-line"></view>
+              <text class="sketch-label">{{item.label}}</text>
+            </view>
             <view class="outfit-caption"><text>{{item.value}}</text><text>{{item.owned ? '衣橱已有' : '搭配参考'}}</text></view>
           </view>
         </view>
+        <button class="search-copy" bindtap="copyPlanSearch">复制这套风格的搜索词</button>
       </view>
-      <view class="plan-guide-grid" wx:if="{{plan}}">
-        <view class="plan-guide-card"><text class="card-label">怎么穿</text><text>{{plan.styling}}</text></view>
-        <view class="plan-guide-card"><text class="card-label">妆容与发型</text><text>{{plan.makeup}}；{{plan.hair}}</text></view>
-        <view class="plan-guide-card"><text class="card-label">出门提醒</text><text>{{plan.reminder}}</text></view>
+      <view class="plan-guide-list" wx:if="{{plan}}">
+        <view class="plan-guide-row"><text class="plan-guide-index">01</text><view><text class="card-label">怎么穿</text><text>{{plan.styling}}</text></view></view>
+        <view class="plan-guide-row"><text class="plan-guide-index">02</text><view><text class="card-label">妆容与发型</text><text>{{plan.makeup}}；{{plan.hair}}</text></view></view>
+        <view class="plan-guide-row"><text class="plan-guide-index">03</text><view><text class="card-label">出门提醒</text><text>{{plan.reminder}}</text></view></view>
       </view>
       <view class="section-head" wx:if="{{plan}}"><text>准备清单</text><text class="muted">今晚照着做</text></view>
-      <view class="prep-grid" wx:if="{{plan}}"><view class="prep-card" wx:for="{{plan.prep}}" wx:key="*this"><text class="prep-index">0{{index + 1}}</text><text>{{item}}</text></view></view>
+      <view class="prep-list" wx:if="{{plan}}"><view class="prep-row" wx:for="{{plan.prep}}" wx:key="*this"><text class="prep-check"></text><text>{{item}}</text></view></view>
       <button class="primary" data-page="conditions" bindtap="navigate">调整条件与风格</button>
     </block>
 

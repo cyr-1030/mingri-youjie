@@ -10,7 +10,7 @@ const DEFAULT = {
   city: '', forecast: null, forecastStatus: 'idle', forecastError: '', forecastFetchedAt: 0,
   environment: '室内为主', occasion: '日常', ageRange: '', zodiacSign: '',
   wardrobeBudget: '500 元内', styles: ['soft', 'french'], wardrobe: [],
-  wardrobeName: '', wardrobeCategory: '上装'
+  wardrobeName: '', wardrobeCategory: '上装', bookIndex: -1
 }
 const OCCASIONS = ['日常', '通勤', '约会', '上课', '聚会', '旅行', '居家']
 const WARDROBE_BUDGETS = ['200 元内', '500 元内', '1000 元内']
@@ -21,10 +21,53 @@ const PUBLIC_THEME_NAMES = {
 }
 const NAV = [
   { id: 'home', icon: '◇', name: '心选' },
+  { id: 'book', icon: '▣', name: '答案书' },
   { id: 'zodiac', icon: '✦', name: '星座' },
   { id: 'plan', icon: '◈', name: '穿搭' },
   { id: 'profile', icon: '○', name: '衣橱' }
 ]
+
+const ZODIAC_META = {
+  aries: ['ARIES', '3.21–4.19'], taurus: ['TAURUS', '4.20–5.20'], gemini: ['GEMINI', '5.21–6.21'],
+  cancer: ['CANCER', '6.22–7.22'], leo: ['LEO', '7.23–8.22'], virgo: ['VIRGO', '8.23–9.22'],
+  libra: ['LIBRA', '9.23–10.23'], scorpio: ['SCORPIO', '10.24–11.22'], sagittarius: ['SAGITTARIUS', '11.23–12.21'],
+  capricorn: ['CAPRICORN', '12.22–1.19'], aquarius: ['AQUARIUS', '1.20–2.18'], pisces: ['PISCES', '2.19–3.20']
+}
+
+function visualTone(value = '', index = 0) {
+  if (/奶油|米白|乳白|象牙|白色|浅色/.test(value)) return 'cream'
+  if (/黑|深灰|炭灰|藏蓝|深色/.test(value)) return 'ink'
+  if (/棕|咖|卡其|驼|燕麦/.test(value)) return 'camel'
+  if (/蓝|牛仔/.test(value)) return 'blue'
+  if (/粉|杏|桃|红/.test(value)) return 'rose'
+  if (/绿|橄榄/.test(value)) return 'green'
+  return ['cream', 'green', 'camel', 'blue', 'rose', 'ink'][index % 6]
+}
+
+function visualType(item = {}) {
+  const label = item.label || ''
+  const value = item.value || ''
+  if (/连身|套装/.test(label)) return /套装/.test(label) ? 'suit' : 'dress'
+  if (/上装/.test(label)) return /衬衫|有领|立领/.test(value) ? 'blouse' : /卫衣|针织|开衫/.test(value) ? 'knit' : 'top'
+  if (/下装/.test(label)) return /裙/.test(value) ? 'skirt' : 'trousers'
+  if (/外层/.test(label)) return /风衣|大衣|西装/.test(value) ? 'coat' : 'cardigan'
+  if (/鞋/.test(label)) return /运动|板鞋/.test(value) ? 'sneaker' : /靴/.test(value) ? 'boot' : 'loafer'
+  if (/包/.test(label)) return /托特|手提|文件/.test(value) ? 'tote' : /斜挎/.test(value) ? 'crossbag' : 'shoulderbag'
+  return /耳|珍珠/.test(value) ? 'earrings' : /围巾|发带/.test(value) ? 'scarf' : 'jewelry'
+}
+
+function decoratePlan(plan) {
+  if (!plan) return null
+  return {
+    ...plan,
+    items: plan.items.map((item, index) => ({
+      ...item,
+      visualType: visualType(item),
+      visualTone: visualTone(item.value, index),
+      visualPattern: /条纹/.test(item.value) ? 'stripe' : /针织|毛衣|开衫/.test(item.value) ? 'knit' : 'plain'
+    }))
+  }
+}
 
 function localDate(offsetDays = 0) {
   const now = new Date(Date.now() + offsetDays * 86400000)
@@ -101,7 +144,7 @@ Page({
     const forecast = s.forecastStatus === 'ready' && s.forecast && s.forecast.date === targetDate ? s.forecast : null
     const reading = readingFor(s, theme)
     const zodiacProfile = profileForSign(s.zodiacSign)
-    const plan = reading ? buildPlan({
+    const rawPlan = reading ? buildPlan({
       styles: s.styles,
       weather: {
         temp: forecast && forecast.temp, rain: forecast && forecast.rain, climate: forecast && forecast.climate,
@@ -112,6 +155,7 @@ Page({
       daily: null, astro: zodiacProfile, ageBand: s.ageRange, themeId: s.themeId,
       objectAction: reading.object.action, reading
     }) : null
+    const plan = decoratePlan(rawPlan)
     const question = theme.questions[s.qIndex] || theme.questions[0]
     const questionOptions = question[1].map((text, index) => ({ text, index, selected: s.answers[s.qIndex] === index }))
     const objects = theme.objects.map((item, index) => ({ ...item, index, tileSrc: `../../assets/objects/s${item.sheet}-t${item.tile}.jpg` }))
@@ -122,10 +166,13 @@ Page({
       index: String(index + 1).padStart(2, '0') }))
     const nav = NAV.map(item => ({ ...item, active: s.page === item.id || (item.id === 'home' && ['quiz', 'draw', 'reading', 'conditions'].includes(s.page)) }))
     const currentRegionIndices = s.currentRegionIndices || [0, 0]
+    const book = s.bookIndex >= 0 ? content.book[s.bookIndex] : null
     this.setData({
       page: s.page, theme: { ...theme, name: PUBLIC_THEME_NAMES[s.themeId] }, themes, nav, dateMode: s.dateMode, targetDate,
       questionText: question[0], questionOptions, qIndex: s.qIndex, progress: Math.round((s.qIndex + 1) / 3 * 100),
-      objects, reading, plan, zodiacSigns: SIGNS.map(item => ({ ...item, selected: item.id === s.zodiacSign })),
+      objects, reading, plan, book, zodiacSigns: SIGNS.map(item => ({
+        ...item, short: ZODIAC_META[item.id][0], date: ZODIAC_META[item.id][1], selected: item.id === s.zodiacSign
+      })),
       zodiacProfile, zodiacName: zodiacProfile ? zodiacProfile.name : '暂未选择',
       currentRegionColumns: getRegionColumns(currentRegionIndices[0]), currentRegionIndices,
       currentRegionLabel: s.city, city: s.city, forecast, weatherFactors: weatherFactorsFor(forecast),
@@ -182,6 +229,18 @@ Page({
     }
   },
   chooseZodiac(e) { this.state.zodiacSign = e.currentTarget.dataset.id; this.refresh() },
+  flipBook() {
+    let next = Math.floor(Math.random() * content.book.length)
+    if (next === this.state.bookIndex) next = (next + 1) % content.book.length
+    this.state.bookIndex = next
+    this.refresh()
+  },
+  copyPlanSearch() {
+    const plan = this.data.plan
+    if (!plan) return
+    const query = `${plan.tags.join(' ')} ${this.state.occasion} ${this.state.environment} 穿搭`
+    wx.setClipboardData({ data: query, success: () => wx.showToast({ title: '搜索词已复制', icon: 'success' }) })
+  },
   invalidateForecast() {
     this.forecastRequestId = (this.forecastRequestId || 0) + 1
     this.state.forecast = null; this.state.forecastStatus = 'idle'; this.state.forecastError = ''; this.state.forecastFetchedAt = 0

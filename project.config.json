@@ -56,6 +56,10 @@
       },
       {
         "type": "file",
+        "value": "THIRD_PARTY_ASSETS.md"
+      },
+      {
+        "type": "file",
         "value": "lib/calendar.js"
       },
       {

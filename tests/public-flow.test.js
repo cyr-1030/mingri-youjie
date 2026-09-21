@@ -46,9 +46,10 @@ test('星座偏好真实改变穿搭细节并保存', () => {
   assert.match(page.data.plan.makeup, /低饱和唇色/)
 })
 
-test('公开入口和页面不展示完整版专属功能', () => {
+test('公开入口保留答案书，但不展示命理专属功能', () => {
   const app = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'app.json')))
   assert.deepEqual(app.pages, ['pages/public/index'])
   const copy = fs.readFileSync(path.join(__dirname, '..', 'pages/public/index.wxml'), 'utf8')
-  assert.doesNotMatch(copy, /八字|五行|命盘|黄历|占卜|运势|答案书/)
+  assert.match(copy, /答案书/)
+  assert.doesNotMatch(copy, /八字|五行|命盘|黄历|占卜|运势/)
 })
