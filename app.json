@@ -1,10 +1,13 @@
 {
-  "pages": ["pages/index/index"],
+  "pages": [
+    "pages/index/index"
+  ],
   "window": {
-    "navigationBarTitleText": "明日有解",
+    "navigationBarTitleText": "明日穿什么",
     "navigationBarBackgroundColor": "#f5f2eb",
     "navigationBarTextStyle": "black",
     "backgroundColor": "#f5f2eb"
   },
-  "style": "v2"
+  "style": "v2",
+  "__usePrivacyCheck__": true
 }

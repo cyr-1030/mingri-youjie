@@ -1,6 +1,6 @@
 {
   "appid": "wx39c04aac5a0ef8c9",
-  "projectname": "明日有解-MVP",
+  "projectname": "明日穿什么-公开版",
   "compileType": "miniprogram",
   "miniprogramRoot": "./",
   "cloudfunctionRoot": "cloudfunctions/",

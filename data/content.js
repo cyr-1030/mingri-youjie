@@ -13,7 +13,7 @@ module.exports = {
   ],
   "themes": {
     "career": {
-      "name": "事业机会",
+      "name": "重要工作",
       "icon": "✒",
       "color": "深绿",
       "accent": "银色笔夹",
@@ -105,7 +105,7 @@ module.exports = {
       ]
     },
     "love": {
-      "name": "感情关系",
+      "name": "约会见面",
       "icon": "♡",
       "color": "玫瑰粉",
       "accent": "柔光耳饰",
@@ -197,7 +197,7 @@ module.exports = {
       ]
     },
     "money": {
-      "name": "财运消费",
+      "name": "轻松日常",
       "icon": "◈",
       "color": "琥珀金",
       "accent": "简洁钱包",
@@ -289,7 +289,7 @@ module.exports = {
       ]
     },
     "study": {
-      "name": "学业成长",
+      "name": "上课学习",
       "icon": "✦",
       "color": "靛蓝",
       "accent": "星点书签",
@@ -381,7 +381,7 @@ module.exports = {
       ]
     },
     "social": {
-      "name": "人际社交",
+      "name": "朋友聚会",
       "icon": "♧",
       "color": "湖蓝",
       "accent": "蓝绿丝巾",
@@ -473,7 +473,7 @@ module.exports = {
       ]
     },
     "wellbeing": {
-      "name": "身心状态",
+      "name": "舒适休息",
       "icon": "☾",
       "color": "鼠尾草绿",
       "accent": "柔软发圈",
@@ -565,7 +565,7 @@ module.exports = {
       ]
     },
     "travel": {
-      "name": "出行安排",
+      "name": "出行旅行",
       "icon": "◇",
       "color": "雾蓝",
       "accent": "轻便斜挎包",
@@ -657,7 +657,7 @@ module.exports = {
       ]
     },
     "family": {
-      "name": "家庭亲密",
+      "name": "家庭相聚",
       "icon": "⌂",
       "color": "暖杏色",
       "accent": "暖色围巾",
@@ -749,7 +749,7 @@ module.exports = {
       ]
     },
     "growth": {
-      "name": "自我探索",
+      "name": "尝试新风格",
       "icon": "✺",
       "color": "紫罗兰",
       "accent": "小巧手账本",

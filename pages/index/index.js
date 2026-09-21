@@ -1,18 +1,11 @@
 const content = require('../../data/content.js')
-const { chartForBirth, almanacFor, localDate, ageBand, ELEMENT_LABEL } = require('../../lib/calendar.js')
-const { ELEMENT_COLORS } = require('../../lib/elements.js')
 const { STYLES, buildPlan, buildWardrobeGaps } = require('../../lib/plan.js')
-const { recommendInspirations } = require('../../lib/inspiration.js')
-const { recommendCreators } = require('../../lib/creator-match.js')
-const { dailyFor } = require('../../lib/daily.js')
 const { normalizeRegion, getRegionColumns, getRegionByIndices, getRegionIndices } = require('../../lib/regions.js')
-const { starChartForBirth } = require('../../lib/astrology.js')
 const { GROUPS: WARDROBE_GROUPS, indicesForCategory, columnsForGroup, categoryAt } = require('../../lib/wardrobe.js')
 
-const STORE = 'mingriyoujie-mvp-v1'
+const STORE = 'mingrichuanda-public-v1'
 const DEFAULT = {
   page: 'home', dateMode: 'tomorrow', themeId: 'career', answers: [], qIndex: 0, objectIndex: -1,
-  birth: null, birthDraft: { date: '', time: '', region: null }, chartMode: 'edit',
   city: '', forecast: null, forecastStatus: 'idle', forecastError: '', forecastFetchedAt: 0,
   environment: '室内为主', occasion: '日常', ageRange: '',
   wardrobeBudget: '500 元内', styles: ['soft', 'french'], wardrobe: [],
@@ -21,36 +14,36 @@ const DEFAULT = {
 const OCCASIONS = ['日常', '通勤', '约会', '上课', '聚会', '旅行', '居家']
 const WARDROBE_BUDGETS = ['200 元内', '500 元内', '1000 元内']
 const AGE_RANGES = ['18–24岁', '25–34岁', '35–44岁', '45岁以上']
-const ELEMENT_ORDER = ['wood', 'fire', 'earth', 'metal', 'water']
-const ELEMENT_IDEA = {
-  wood: { image: '生长与舒展' },
-  fire: { image: '明亮与表达' },
-  earth: { image: '稳定与承接' },
-  metal: { image: '边界与梳理' },
-  water: { image: '流动与观察' }
-}
-const ZODIAC_SYMBOLS = ['♈', '♉', '♊', '♋', '♌', '♍', '♎', '♏', '♐', '♑', '♒', '♓']
-const PLANET_SYMBOLS = { sun: '☉', moon: '☽', mercury: '☿', venus: '♀', mars: '♂' }
 const NAV = [
-  { id: 'home', icon: '◇', name: '明日签' },
-  { id: 'book', icon: '▣', name: '答案书' },
-  { id: 'chart', icon: '✦', name: '命盘' },
+  { id: 'home', icon: '◇', name: '穿搭' },
+  { id: 'book', icon: '▣', name: '行动卡' },
   { id: 'plan', icon: '◈', name: '方案' },
-  { id: 'profile', icon: '○', name: '我的' }
+  { id: 'profile', icon: '○', name: '衣橱' }
 ]
 
-function readingFor(state, theme, almanac) {
+function localDate(offset = 0) {
+  const date = new Date()
+  date.setHours(12, 0, 0, 0)
+  date.setDate(date.getDate() + offset)
+  const y = date.getFullYear()
+  const m = String(date.getMonth() + 1).padStart(2, '0')
+  const d = String(date.getDate()).padStart(2, '0')
+  return `${y}-${m}-${d}`
+}
+
+function readingFor(state, theme) {
   if (state.objectIndex < 0 || state.answers.length < 3) return null
   const object = theme.objects[state.objectIndex]
   const guide = object.guide
-  const wants = theme.states[state.answers[2]]
-  const reacts = theme.reactions[state.answers[1]]
-  let calendarCue = '黄历宜忌仅作传统文化参考，明日行动以真实日程与条件为准。'
-  if (state.themeId === 'travel' && almanac.yi.includes('出行')) calendarCue = '传统黄历将「出行」列在今日宜项；出门安排仍请以天气和路线为准。'
-  if (state.themeId === 'travel' && almanac.ji.includes('出行')) calendarCue = '传统黄历将「出行」列在今日忌项；如需外出，仍请按真实日程、天气与路线安排。'
   return {
-    object, title: `${object.sign} · ${object.meaning}`, summary: guide[0], do: guide[1], avoid: guide[2],
-    wants, reacts, calendarCue, first: theme.questions[0][1][state.answers[0]]
+    object,
+    title: `${object.meaning} · ${object.action}`,
+    summary: guide[0],
+    do: guide[1],
+    avoid: guide[2],
+    wants: theme.states[state.answers[2]],
+    reacts: theme.reactions[state.answers[1]],
+    first: theme.questions[0][1][state.answers[0]]
   }
 }
 
@@ -62,32 +55,11 @@ function weatherFactorsFor(forecast) {
   return [rain, climate].filter(Boolean).join(' · ')
 }
 
-function chartProfileFor(chart) {
-  if (!chart) return null
-  const min = Math.min(...ELEMENT_ORDER.map(id => chart.counts[id]))
-  const light = ELEMENT_ORDER.filter(id => chart.counts[id] === min).slice(0, 2)
-  const supportedBy = ELEMENT_ORDER[(ELEMENT_ORDER.indexOf(chart.element) + 4) % 5]
-  const supports = ELEMENT_ORDER[(ELEMENT_ORDER.indexOf(chart.element) + 1) % 5]
-  return {
-    image: ELEMENT_IDEA[chart.element].image,
-    supportedBy: ELEMENT_LABEL[supportedBy], supports: ELEMENT_LABEL[supports],
-    lightText: light.map(id => ELEMENT_LABEL[id]).join('、'),
-    note: '表层五行计数只是结构信息，不能据此判断传统命理的喜用神；界面配色不决定每日穿搭。'
-  }
-}
-
-function wheelPoint(angle, radius) {
-  const radians = (angle - 90) * Math.PI / 180
-  return { left: Math.round((50 + radius * Math.cos(radians)) * 10) / 10,
-    top: Math.round((50 + radius * Math.sin(radians)) * 10) / 10 }
-}
-
 Page({
   data: {
     page: 'home', themeClass: 'theme-neutral', nav: NAV,
     themes: [], styles: STYLES,
-    occasions: OCCASIONS, wardrobeBudgets: WARDROBE_BUDGETS, ageRanges: AGE_RANGES,
-    pillarLabels: ['年柱', '月柱', '日柱', '时柱']
+    occasions: OCCASIONS, wardrobeBudgets: WARDROBE_BUDGETS, ageRanges: AGE_RANGES
   },
 
   onLoad() {
@@ -101,9 +73,6 @@ Page({
     this.state.forecastError = ''
     this.state.forecastFetchedAt = 0
     this.state.page = 'home'
-    this.state.chartMode = this.state.birth ? 'view' : 'edit'
-    this.state.birthDraft = { date: '', time: '', region: null }
-    this.state.birthRegionIndices = [0, 0]
     this.state.currentRegionIndices = getRegionIndices(this.state.city)
     this.forecastRequestId = 0
     this.refresh()
@@ -121,7 +90,7 @@ Page({
     const s = this.state
     const snapshot = {
       dateMode: s.dateMode, themeId: s.themeId, answers: s.answers, objectIndex: s.objectIndex,
-      birth: s.birth, city: s.city,
+      city: s.city,
       environment: s.environment, occasion: s.occasion, wardrobeBudget: s.wardrobeBudget, ageRange: s.ageRange,
       styles: s.styles, wardrobe: s.wardrobe
     }
@@ -132,45 +101,9 @@ Page({
     const s = this.state
     const wardrobeCategoryIndices = indicesForCategory(s.wardrobeCategory)
     const theme = content.themes[s.themeId] || content.themes.career
-    const birthRegion = s.birth && (s.birth.region || normalizeRegion(s.birth.city))
-    let chart = null
-    if (s.birth && s.birth.date && (!birthRegion || birthRegion.countryCode !== 'OVERSEAS')) {
-      try {
-        const historicalTime = s.birth.date < '1992-01-01' && !!s.birth.time
-        chart = chartForBirth(historicalTime ? { ...s.birth, time: '' } : s.birth)
-        if (historicalTime) chart.historicalTime = true
-      } catch (e) { chart = null }
-    }
-    let starChart = null
-    if (s.page === 'chart' && s.birth) {
-      try {
-        starChart = starChartForBirth({ date: s.birth.date, time: s.birth.time,
-          location: birthRegion || { countryCode: 'OVERSEAS' } })
-      } catch (e) {
-        starChart = { status: 'unavailable', message: e.message || '星体位置暂时无法计算。', note: '' }
-      }
-    }
-    const wheelSigns = starChart && starChart.status === 'ready'
-      ? starChart.sectors.map((sector, index) => ({ sign: sector.sign,
-        symbol: ZODIAC_SYMBOLS[index], ...wheelPoint(sector.startAngle + 15, 41) })) : []
-    const wheelBodies = starChart && starChart.status === 'ready'
-      ? starChart.bodies.map((body, index) => ({ key: body.key,
-        symbol: PLANET_SYMBOLS[body.key], ...wheelPoint(body.wheelAngle, [27, 34, 24, 32, 28][index]) })) : []
-    if (starChart && starChart.status === 'ready') {
-      starChart.bodies = starChart.bodies.map(body => ({ ...body,
-        degreeInSign: Math.round(body.degreeInSign * 10) / 10 }))
-    }
-    const chartProfile = chartProfileFor(chart)
-    const element = chart ? chart.element : 'neutral'
-    const elementBars = chart ? Object.keys(ELEMENT_LABEL).map(id => ({
-      id, label: ELEMENT_LABEL[id], count: chart.counts[id], hex: ELEMENT_COLORS[id].hex,
-      width: Math.round(chart.counts[id] / chart.pillars.length / 2 * 100)
-    })) : []
     const targetDate = localDate(s.dateMode === 'tomorrow' ? 1 : 0)
     const forecast = s.forecastStatus === 'ready' && s.forecast && s.forecast.date === targetDate ? s.forecast : null
-    const almanac = almanacFor(targetDate)
-    const daily = dailyFor(chart, almanac)
-    const reading = readingFor(s, theme, almanac)
+    const reading = readingFor(s, theme)
     const plan = reading ? buildPlan({
       styles: s.styles, weather: {
         temp: forecast && forecast.temp, rain: forecast && forecast.rain,
@@ -180,13 +113,9 @@ Page({
         sourceLabel: forecast ? '当地预报' : '暂无天气数据'
       }, wardrobe: s.wardrobe,
       environment: s.environment, occasion: s.occasion,
-      city: s.city, daily, ageBand: s.birth ? ageBand(s.birth.date) : s.ageRange,
+      city: s.city, daily: null, ageBand: s.ageRange,
       themeId: s.themeId, objectAction: reading.object.action, reading
     }) : null
-    const inspirations = recommendInspirations({ styleIds: s.styles, plan, occasion: s.occasion })
-    const creatorMatches = plan ? recommendCreators({
-      styleIds: s.styles, occasion: s.occasion, environment: s.environment
-    }) : []
     const question = theme.questions[s.qIndex] || theme.questions[0]
     const questionOptions = question[1].map((text, index) => ({ text, index, selected: s.answers[s.qIndex] === index }))
     const objects = theme.objects.map((o, index) => ({
@@ -198,19 +127,12 @@ Page({
     const wardrobeGaps = buildWardrobeGaps({ styles: s.styles, wardrobe: s.wardrobe, budget: s.wardrobeBudget })
     const themes = content.order.map((id, index) => ({ ...content.themes[id], id, index: String(index + 1).padStart(2, '0') }))
     const nav = NAV.map(x => ({ ...x, active: s.page === x.id || (x.id === 'home' && ['quiz', 'draw', 'reading', 'conditions'].includes(s.page)) }))
-    const birthRegionIndices = s.birthRegionIndices || [0, 0]
     const currentRegionIndices = s.currentRegionIndices || [0, 0]
     this.setData({
-      page: s.page, themeClass: `theme-${element}`, theme, themes, nav,
-      dateMode: s.dateMode, targetDate, almanac, chart, chartProfile, starChart, daily,
-      wheelSigns, wheelBodies, starSpokes: [0, 30, 60, 90, 120, 150], elementBars,
-      elementLabel: chart ? ELEMENT_LABEL[element] : '',
-      yiText: almanac.yi.join(' · '), jiText: almanac.ji.join(' · '),
+      page: s.page, themeClass: 'theme-neutral', theme, themes, nav,
+      dateMode: s.dateMode, targetDate,
       questionText: question[0], questionOptions, qIndex: s.qIndex, progress: Math.round((s.qIndex + 1) / 3 * 100),
-      objects, reading, plan, inspirations, creatorMatches,
-      birthDraft: s.birthDraft, birth: !!s.birth, chartMode: s.chartMode,
-      birthRegionColumns: getRegionColumns(birthRegionIndices[0]), birthRegionIndices,
-      birthRegionLabel: s.birthDraft.region ? s.birthDraft.region.displayName : '',
+      objects, reading, plan,
       currentRegionColumns: getRegionColumns(currentRegionIndices[0]), currentRegionIndices,
       currentRegionLabel: s.city, city: s.city,
       forecast, weatherFactors: weatherFactorsFor(forecast), forecastStatus: s.forecastStatus,
@@ -222,7 +144,7 @@ Page({
       wardrobeCategoryGroup: WARDROBE_GROUPS[wardrobeCategoryIndices[0]].name,
       wardrobeCategoryColumns: columnsForGroup(wardrobeCategoryIndices[0]), wardrobeCategoryIndices,
       book,
-      ageBand: s.birth ? ageBand(s.birth.date) : s.ageRange,
+      ageBand: s.ageRange,
       styleText: plan ? plan.tags.join(' / ') : STYLES.filter(x => s.styles.includes(x.id)).map(x => x.name).join(' / '),
       canAdvance: s.answers[s.qIndex] != null
     })
@@ -232,10 +154,9 @@ Page({
   navigate(e) {
     const page = e.currentTarget.dataset.page
     if (page === 'plan' && this.state.objectIndex < 0) {
-      wx.showToast({ title: '先完成一次明日签', icon: 'none' })
+      wx.showToast({ title: '先完成一次穿搭探索', icon: 'none' })
       return
     }
-    if (page === 'chart') this.state.chartMode = this.state.birth ? 'view' : 'edit'
     this.state.page = page
     this.refresh()
     wx.pageScrollTo({ scrollTop: 0, duration: 0 })
@@ -395,61 +316,6 @@ Page({
     this.refresh()
   },
   goPlan() { this.state.page = 'plan'; this.refresh(); this.loadForecast(); wx.pageScrollTo({ scrollTop: 0, duration: 0 }) },
-  birthDate(e) { this.state.birthDraft.date = e.detail.value; this.setData({ birthDraft: this.state.birthDraft }) },
-  birthTime(e) { this.state.birthDraft.time = e.detail.value; this.setData({ birthDraft: this.state.birthDraft }) },
-  birthRegionColumnChange(e) {
-    const indices = (this.state.birthRegionIndices || [0, 0]).slice()
-    indices[e.detail.column] = Number(e.detail.value)
-    if (e.detail.column === 0) indices[1] = 0
-    this.state.birthRegionIndices = indices
-    this.setData({ birthRegionIndices: indices, birthRegionColumns: getRegionColumns(indices[0]) })
-  },
-  birthRegionChange(e) {
-    const region = getRegionByIndices(e.detail.value)
-    if (!region) return
-    this.state.birthDraft.region = region
-    this.state.birthRegionIndices = getRegionIndices(region)
-    this.refresh()
-  },
-  birthRegionCancel() {
-    this.state.birthRegionIndices = getRegionIndices(this.state.birthDraft.region)
-    this.refresh()
-  },
-  showBirthEditor() {
-    this.state.birthDraft = { date: '', time: '', region: null }
-    this.state.birthRegionIndices = [0, 0]
-    this.state.chartMode = 'edit'
-    this.refresh()
-    wx.pageScrollTo({ scrollTop: 0, duration: 0 })
-  },
-  cancelBirthEditor() {
-    this.state.chartMode = 'view'
-    this.state.birthDraft = { date: '', time: '', region: null }
-    this.refresh()
-  },
-  saveBirth() {
-    const b = this.state.birthDraft
-    const region = b.region || normalizeRegion(b.city)
-    if (!b.date || !region) { wx.showToast({ title: '请选择日期与出生地区', icon: 'none' }); return }
-    try { chartForBirth({ date: b.date, time: b.time, city: region.city }) } catch (e) { wx.showToast({ title: e.message, icon: 'none' }); return }
-    this.state.birth = { date: b.date, time: b.time || '', city: region.city, region }
-    this.state.birthDraft = { date: '', time: '', region: null }
-    this.state.birthRegionIndices = [0, 0]
-    this.state.chartMode = 'view'
-    this.refresh()
-    wx.pageScrollTo({ scrollTop: 0, duration: 0 })
-    wx.showToast({ title: region.isOverseas ? '资料已保存' : '命盘已生成', icon: 'none' })
-  },
-  clearBirth() {
-    wx.showModal({ title: '删除出生资料', content: '删除后界面会回到默认色调。', success: res => {
-      if (!res.confirm) return
-      this.state.birth = null
-      this.state.birthDraft = { date: '', time: '', region: null }
-      this.state.birthRegionIndices = [0, 0]
-      this.state.chartMode = 'edit'
-      this.refresh()
-    } })
-  },
   wardrobeName(e) { this.state.wardrobeName = e.detail.value; this.setData({ wardrobeName: e.detail.value }) },
   wardrobeCategoryColumnChange(e) {
     if (e.detail.column !== 0) return
@@ -506,24 +372,6 @@ Page({
       wx.removeSavedFile({ filePath: removed.photo, fail: () => {} })
     }
     this.refresh()
-  },
-  copyInspiration(e) {
-    const card = (this.data.inspirations || []).find(item => item.id === e.currentTarget.dataset.id)
-    if (!card) return
-    wx.setClipboardData({
-      data: card.source ? card.source.url : card.searchQuery,
-      success: () => wx.showToast({ title: card.source ? '已复制原文链接' : '已复制搜索词', icon: 'none' }),
-      fail: () => wx.showToast({ title: '复制失败，请重试', icon: 'none' })
-    })
-  },
-  copyCreatorLink(e) {
-    const creator = (this.data.creatorMatches || []).find(item => item.id === e.currentTarget.dataset.id)
-    if (!creator) return
-    wx.setClipboardData({
-      data: creator.profileUrl,
-      success: () => wx.showToast({ title: '已复制博主主页', icon: 'none' }),
-      fail: () => wx.showToast({ title: '复制失败，请重试', icon: 'none' })
-    })
   },
   copyWardrobeGap(e) {
     const gap = (this.data.wardrobeGaps || []).find(item => item.id === e.currentTarget.dataset.id)

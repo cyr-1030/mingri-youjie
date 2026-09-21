@@ -1,13 +1,9 @@
 {
-  "name": "mingriyoujie-miniapp",
+  "name": "mingrichuanda-miniapp-public",
   "version": "0.1.0",
   "private": true,
   "scripts": {
     "test": "node --test tests/*.test.js",
-    "check": "npm test && node --check pages/index/index.js && node --check cloudfunctions/getForecast/index.js && node --check cloudfunctions/getForecast/weather.js"
-  },
-  "dependencies": {
-    "astronomy-engine": "2.1.19",
-    "lunar-javascript": "1.7.7"
+    "check": "npm test && node --check pages/index/index.js && node --check lib/plan.js && node --check cloudfunctions/getForecast/index.js && node --check cloudfunctions/getForecast/weather.js"
   }
 }
