@@ -64,7 +64,10 @@ function decoratePlan(plan) {
       ...item,
       visualType: visualType(item),
       visualTone: visualTone(item.value, index),
-      visualPattern: /条纹/.test(item.value) ? 'stripe' : /针织|毛衣|开衫/.test(item.value) ? 'knit' : 'plain'
+      visualPattern: /条纹/.test(item.value) ? 'stripe' : /针织|毛衣|开衫/.test(item.value) ? 'knit' : 'plain',
+      visualSlot: /外层/.test(item.label) ? 'outer' : /上装|连身|套装/.test(item.label) ? 'main' :
+        /下装/.test(item.label) ? 'bottom' : /鞋/.test(item.label) ? 'shoes' :
+          /包/.test(item.label) ? 'bag' : 'accent'
     }))
   }
 }

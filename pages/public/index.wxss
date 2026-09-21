@@ -382,3 +382,59 @@
 .prep-check { width: 22rpx; height: 22rpx; margin-top: 5rpx; border: 2rpx solid #9d8a69; border-radius: 50%; }
 .inline-note text { color: var(--accent); font-weight: 600; }
 .public-wardrobe-row { grid-template-columns: 1fr auto; }
+
+/* 穿搭页：把单品放进同一张平铺画板，避免六张占位卡片彼此割裂。 */
+.flatlay-board { position: relative; height: 540rpx; overflow: hidden; border: 1rpx solid #d7cbb5; border-radius: 16rpx; background: radial-gradient(circle at 22% 15%, #fffdf8 0, #f4eee3 38%, transparent 39%), linear-gradient(135deg, #f2ebdf, #e7dece); box-shadow: inset 0 0 45rpx #8f7b5810; }
+.flatlay-board::before { content: ''; position: absolute; left: -62rpx; bottom: -70rpx; width: 230rpx; height: 230rpx; border: 1rpx solid #a48d6650; border-radius: 50%; }
+.flatlay-board::after { content: ''; position: absolute; right: 22rpx; top: 106rpx; width: 82rpx; height: 1rpx; background: #aa946b75; transform: rotate(-33deg); }
+.flatlay-caption { position: absolute; z-index: 8; left: 22rpx; top: 19rpx; display: flex; flex-direction: column; gap: 3rpx; color: #87704e; font-size: 15rpx; letter-spacing: .08em; }
+.flatlay-caption text:first-child { color: var(--accent); font-family: Georgia, serif; font-size: 19rpx; letter-spacing: .04em; }
+.flatlay-stamp { position: absolute; z-index: 8; right: 18rpx; bottom: 16rpx; padding: 8rpx 10rpx; border: 1rpx solid #917b5860; color: #806c4b; font-family: Georgia, serif; font-size: 13rpx; line-height: 1.35; text-align: center; transform: rotate(-3deg); }
+.flatlay-item { --garment: #d9cfb9; --garment-dark: #8f8067; position: absolute; z-index: 3; width: 190rpx; height: 190rpx; transform-origin: center; }
+.flatlay-item .sketch-shadow { bottom: 18rpx; opacity: .72; }
+.flatlay-item .sketch-line { top: 62rpx; }
+.slot-outer { z-index: 1; left: 2rpx; top: 65rpx; transform: rotate(-9deg) scale(.88); opacity: .88; }
+.slot-main { z-index: 4; left: 138rpx; top: 54rpx; transform: rotate(3deg) scale(.96); }
+.slot-bottom { z-index: 3; left: 260rpx; top: 194rpx; transform: rotate(-3deg) scale(1.12); }
+.slot-shoes { z-index: 5; left: 12rpx; top: 342rpx; transform: rotate(-8deg) scale(.92); }
+.slot-bag { z-index: 5; right: 6rpx; top: 306rpx; transform: rotate(7deg) scale(.94); }
+.slot-accent { z-index: 5; right: 8rpx; top: 57rpx; transform: rotate(6deg) scale(.76); }
+.outfit-pick-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rpx 24rpx; margin-top: 20rpx; border-top: 1rpx solid #d8cfbe; }
+.outfit-pick { min-width: 0; padding: 16rpx 0; display: grid; grid-template-columns: 18rpx minmax(0, 1fr) auto; align-items: center; gap: 10rpx; border-bottom: 1rpx solid #ded6c8; }
+.outfit-swatch { --garment: #d9cfb9; display: block; width: 16rpx; height: 16rpx; border: 1rpx solid #8c816d; border-radius: 50%; background: var(--garment); }
+.outfit-pick > view { min-width: 0; display: flex; flex-direction: column; gap: 3rpx; }
+.outfit-pick-label { color: #99805b; font-size: 16rpx; }
+.outfit-pick-name { overflow: hidden; color: #334b3d; font-size: 19rpx; line-height: 1.35; white-space: nowrap; text-overflow: ellipsis; }
+.outfit-pick-state { color: #8c958b; font-size: 15rpx; }
+
+/* 衣橱页：表单、已有单品和长期补充清单分别成区。 */
+.profile-pills { padding: 0; flex-direction: row; flex-wrap: wrap; gap: 9rpx; background: transparent; }
+.profile-pills text { padding: 9rpx 14rpx; border: 1rpx solid #ccd2c5; border-radius: 999rpx; background: var(--tint); color: #4c6656; font-size: 18rpx; }
+.wardrobe-panel { margin-top: 28rpx; padding: 24rpx; border: 1rpx solid #d7d0c1; border-radius: 18rpx; background: #fcfaf5; box-shadow: 0 8rpx 24rpx #453b2610; }
+.wardrobe-panel-head { margin: 0 0 20rpx; }
+.wardrobe-form { display: grid; grid-template-columns: minmax(0, 1fr) 180rpx; gap: 12rpx; }
+.wardrobe-form picker { grid-column: 1 / -1; }
+.wardrobe-form input { box-sizing: border-box; min-width: 0; height: 76rpx; padding: 0 17rpx; border: 1rpx solid #c5cbbb; border-radius: 10rpx; background: #fffdf8; color: #2d4738; font-size: 22rpx; }
+.wardrobe-form button { height: 76rpx; margin: 0; padding: 0; border-radius: 10rpx; background: var(--accent); color: #fff7e8; font-size: 21rpx; line-height: 76rpx; }
+.wardrobe-form .category-picker { justify-content: space-between; min-height: 70rpx; padding: 0 18rpx; text-align: left; }
+.category-picker-label { color: #9b815b; font-size: 18rpx; }
+.wardrobe-list { margin-top: 17rpx; border-top: 1rpx solid #ddd6c8; }
+.public-wardrobe-row { min-height: 86rpx; }
+.wardrobe-dot { width: 13rpx; height: 13rpx; flex: none; border: 1rpx solid #8a7658; border-radius: 50%; background: #d9c8a8; }
+.public-wardrobe-row .wardrobe-row-text text:first-child { color: #30493b; font-size: 22rpx; }
+.public-wardrobe-row .wardrobe-row-text text:last-child { color: #9a835f; font-size: 17rpx; }
+.public-wardrobe-row button { min-height: 52rpx; line-height: 52rpx; font-size: 18rpx; }
+.wardrobe-panel .empty-wardrobe { padding: 39rpx 12rpx 25rpx; display: flex; flex-direction: column; gap: 6rpx; }
+.wardrobe-panel .empty-wardrobe text:first-child { color: #506559; font-family: 'Songti SC', serif; font-size: 25rpx; }
+.wardrobe-panel .empty-wardrobe text:last-child { color: #92998f; font-size: 19rpx; }
+.wardrobe-gap-panel { margin-top: 22rpx; }
+.wardrobe-gap-intro { display: block; margin: -4rpx 0 18rpx; color: #7d887f; font-size: 20rpx; line-height: 1.5; }
+.budget-tabs { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 9rpx; padding: 5rpx; border-radius: 13rpx; background: #eee9df; }
+.budget-tabs .chip { width: 100%; min-height: 62rpx; padding: 0 5rpx; border: 0; border-radius: 9rpx; background: transparent; font-size: 20rpx; line-height: 62rpx; }
+.budget-tabs .chip.active { background: var(--accent); color: #fff7e8; box-shadow: 0 4rpx 12rpx #173b3020; }
+.wardrobe-gap-list { margin-top: 18rpx; display: flex; flex-direction: column; gap: 10rpx; }
+.wardrobe-gap-card { min-height: 0; padding: 19rpx; display: grid; grid-template-columns: 38rpx minmax(0, 1fr) auto; align-items: center; gap: 12rpx; border-radius: 12rpx; }
+.wardrobe-gap-copy { min-width: 0; display: flex; flex-direction: column; gap: 5rpx; }
+.wardrobe-gap-name { overflow: hidden; font-size: 24rpx; white-space: nowrap; text-overflow: ellipsis; }
+.wardrobe-gap-card button { align-self: center; min-height: 54rpx; margin: 0; padding: 0 14rpx; line-height: 54rpx; white-space: nowrap; }
+.wardrobe-gap-empty { padding: 30rpx 12rpx !important; }

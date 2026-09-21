@@ -157,15 +157,19 @@
         <view class="plan-story-tags"><text>{{plan.focus}}</text><text wx:if="{{zodiacProfile}}">{{zodiacProfile.name}} · {{zodiacProfile.actionCue}}</text></view>
       </view>
       <view class="outfit-board" wx:if="{{plan}}">
-        <view class="outfit-board-head"><view><text>今天穿什么</text><text class="outfit-board-sub">按本次条件组合的搭配画板</text></view><text>{{plan.items.length}} 件</text></view>
-        <view class="outfit-grid">
-          <view class="outfit-tile" wx:for="{{plan.items}}" wx:key="label">
-            <image wx:if="{{item.photo}}" src="{{item.photo}}" mode="aspectFill"></image>
-            <view wx:else class="fashion-sketch fashion-{{item.visualType}} tone-{{item.visualTone}} pattern-{{item.visualPattern}}">
-              <view class="sketch-shadow"></view><view class="sketch-piece piece-a"></view><view class="sketch-piece piece-b"></view><view class="sketch-piece piece-c"></view><view class="sketch-line"></view>
-              <text class="sketch-label">{{item.label}}</text>
-            </view>
-            <view class="outfit-caption"><text>{{item.value}}</text><text>{{item.owned ? '衣橱已有' : '搭配参考'}}</text></view>
+        <view class="outfit-board-head"><view><text>整套搭配</text><text class="outfit-board-sub">单品、颜色与层次放在一起看</text></view><text>{{plan.items.length}} 件</text></view>
+        <view class="flatlay-board">
+          <view class="flatlay-caption"><text>{{plan.tags[0]}}</text><text>{{occasion}}</text></view>
+          <view class="flatlay-item slot-{{item.visualSlot}} fashion-{{item.visualType}} tone-{{item.visualTone}} pattern-{{item.visualPattern}}" wx:for="{{plan.items}}" wx:key="label">
+            <view class="sketch-shadow"></view><view class="sketch-piece piece-a"></view><view class="sketch-piece piece-b"></view><view class="sketch-piece piece-c"></view><view class="sketch-line"></view>
+          </view>
+          <view class="flatlay-stamp">LOOK<br/>{{targetDate}}</view>
+        </view>
+        <view class="outfit-pick-grid">
+          <view class="outfit-pick" wx:for="{{plan.items}}" wx:key="label">
+            <text class="outfit-swatch tone-{{item.visualTone}}"></text>
+            <view><text class="outfit-pick-label">{{item.label}}</text><text class="outfit-pick-name">{{item.value}}</text></view>
+            <text class="outfit-pick-state">{{item.owned ? '已有' : '参考'}}</text>
           </view>
         </view>
         <button class="search-copy" bindtap="copyPlanSearch">复制这套风格的搜索词</button>
@@ -182,18 +186,28 @@
 
     <block wx:elif="{{page === 'profile'}}">
       <view class="eyebrow">衣橱与偏好</view>
-      <view class="page-title">把常穿的单品放进来。</view>
-      <view class="page-subtitle">方案会优先使用适合天气和场合的已有衣物。</view>
-      <view class="profile-summary"><text>风格：{{styleText}}</text><text>星座偏好：{{zodiacName}}</text></view>
-      <view class="section-head"><text>我的衣橱</text><text class="muted">常穿单品</text></view>
-      <view class="wardrobe-category-line"><text>物品分类</text><picker mode="multiSelector" range="{{wardrobeCategoryColumns}}" value="{{wardrobeCategoryIndices}}" bindcolumnchange="wardrobeCategoryColumnChange" bindchange="wardrobeCategory"><view class="category-picker">{{wardrobeCategoryGroup}} / {{wardrobeCategory}}　⌄</view></picker></view>
-      <view class="wardrobe-add"><input placeholder="例如：米白衬衫、牛仔半裙" value="{{wardrobeName}}" bindinput="wardrobeName" maxlength="30" /><button bindtap="addWardrobe">添加物品</button></view>
-      <view class="wardrobe-row public-wardrobe-row" wx:for="{{wardrobe}}" wx:key="id"><view class="wardrobe-row-text"><text>{{item.category}} · {{item.name}}</text></view><button data-id="{{item.id}}" bindtap="removeWardrobe">删除</button></view>
-      <view class="empty-wardrobe" wx:if="{{wardrobe.length === 0}}">先加一件常穿的衣服、鞋或配饰。</view>
-      <view class="section-head wardrobe-gap-head"><text>以后想添置</text><text class="muted">按预算看三件</text></view>
-      <view class="chip-row"><button class="chip {{wardrobeBudget === item ? 'active' : ''}}" wx:for="{{wardrobeBudgets}}" wx:key="*this" data-key="wardrobeBudget" data-value="{{item}}" bindtap="setField">{{item}}</button></view>
-      <view class="wardrobe-gap-grid"><view class="wardrobe-gap-card" wx:for="{{wardrobeGaps}}" wx:key="id"><text class="wardrobe-gap-index">0{{index + 1}}</text><text class="wardrobe-gap-category">{{item.category}} · {{item.price}}</text><text class="wardrobe-gap-name">{{item.name}}</text><button data-id="{{item.id}}" bindtap="copyWardrobeGap">复制搜索词</button></view></view>
-      <view class="empty-wardrobe wardrobe-gap-empty" wx:if="{{wardrobeGaps.length === 0}}">现在的衣橱已经够用。</view>
+      <view class="page-title">整理你的日常衣橱。</view>
+      <view class="page-subtitle">记录常穿单品，生成方案时会优先从已有衣物里搭配。</view>
+      <view class="profile-summary profile-pills"><text>{{styleText}}</text><text>{{zodiacName}}</text></view>
+      <view class="wardrobe-panel">
+        <view class="section-head wardrobe-panel-head"><text>我的衣橱</text><text class="muted">{{wardrobe.length}} 件</text></view>
+        <view class="wardrobe-form">
+          <picker mode="multiSelector" range="{{wardrobeCategoryColumns}}" value="{{wardrobeCategoryIndices}}" bindcolumnchange="wardrobeCategoryColumnChange" bindchange="wardrobeCategory"><view class="category-picker"><text class="category-picker-label">分类</text><text>{{wardrobeCategoryGroup}} / {{wardrobeCategory}}　⌄</text></view></picker>
+          <input placeholder="写下单品，如米白衬衫" value="{{wardrobeName}}" bindinput="wardrobeName" maxlength="30" />
+          <button bindtap="addWardrobe">加入衣橱</button>
+        </view>
+        <view class="wardrobe-list" wx:if="{{wardrobe.length}}">
+          <view class="wardrobe-row public-wardrobe-row" wx:for="{{wardrobe}}" wx:key="id"><text class="wardrobe-dot"></text><view class="wardrobe-row-text"><text>{{item.name}}</text><text>{{item.category}}</text></view><button data-id="{{item.id}}" bindtap="removeWardrobe">移除</button></view>
+        </view>
+        <view class="empty-wardrobe" wx:if="{{wardrobe.length === 0}}"><text>衣橱还是空的</text><text>先加入一件最近常穿的单品</text></view>
+      </view>
+      <view class="wardrobe-panel wardrobe-gap-panel">
+        <view class="section-head wardrobe-panel-head"><text>以后想添置</text><text class="muted">长期补充清单</text></view>
+        <text class="wardrobe-gap-intro">选一个预算，看看衣橱里最值得补齐的三件基础单品。</text>
+        <view class="budget-tabs"><button class="chip {{wardrobeBudget === item ? 'active' : ''}}" wx:for="{{wardrobeBudgets}}" wx:key="*this" data-key="wardrobeBudget" data-value="{{item}}" bindtap="setField">{{item}}</button></view>
+        <view class="wardrobe-gap-list"><view class="wardrobe-gap-card" wx:for="{{wardrobeGaps}}" wx:key="id"><text class="wardrobe-gap-index">0{{index + 1}}</text><view class="wardrobe-gap-copy"><text class="wardrobe-gap-category">{{item.category}} · {{item.price}}</text><text class="wardrobe-gap-name">{{item.name}}</text></view><button data-id="{{item.id}}" bindtap="copyWardrobeGap">复制搜索词</button></view></view>
+        <view class="empty-wardrobe wardrobe-gap-empty" wx:if="{{wardrobeGaps.length === 0}}">现在的衣橱已经够用。</view>
+      </view>
     </block>
   </view>
 
