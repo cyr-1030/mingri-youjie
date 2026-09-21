@@ -1,0 +1,397 @@
+{
+  "source": "用户提供的穿搭博主风格图鉴和主页链接（2026-09-21）",
+  "purpose": "内部选题候选；仅使用站内按名称搜索核对过的主页 ID。search_match 尚需逐个检查主页和风格；unverified 不可用作来源。具体笔记、内容使用许可另行核验，不直接展示给小程序用户",
+  "groups": [
+    {
+      "id": "commute",
+      "name": "气质通勤风",
+      "styleIds": [
+        "minimal",
+        "office"
+      ],
+      "creators": [
+        {
+          "handle": "小啊張",
+          "profileUrl": "https://www.xiaohongshu.com/user/profile/5bc860f57a0a260001630adf",
+          "redId": "155108070",
+          "identityStatus": "profile_verified",
+          "checkedAt": "2026-09-21",
+          "styleIds": ["minimal", "office", "cleanfit"],
+          "cue": "干净利落的气质通勤风"
+        },
+        {
+          "handle": "凌凌希",
+          "profileUrl": "https://www.xiaohongshu.com/user/profile/62a2f1c300000000210256a9",
+          "redId": "llx1123007",
+          "identityStatus": "profile_verified",
+          "checkedAt": "2026-09-21",
+          "styleIds": ["korean", "minimal", "office"],
+          "cue": "冷调高级感，适合都市职场",
+          "verificationNote": "主页自述为韩系穿搭；原“冷调都市职场”标签待复核"
+        },
+        {
+          "handle": "烨子Y",
+          "profileUrl": "https://www.xiaohongshu.com/user/profile/5e2285a4000000000100b7e1",
+          "redId": "Ye_zi7203",
+          "identityStatus": "search_match",
+          "checkedAt": "2026-09-21",
+          "cue": "简约大气，随性与气质感兼备"
+        },
+        {
+          "handle": "一只库米",
+          "profileUrl": "https://www.xiaohongshu.com/user/profile/5dbfdf2400000000010060d1",
+          "redId": "871927685",
+          "identityStatus": "search_match",
+          "checkedAt": "2026-09-21",
+          "cue": "淡颜系松弛感通勤"
+        },
+        {
+          "handle": "全智鹅",
+          "profileUrl": "https://www.xiaohongshu.com/user/profile/56ca6a6184edcd7e46b78e4a",
+          "redId": "49313266315",
+          "identityStatus": "search_match",
+          "checkedAt": "2026-09-21",
+          "cue": "利落都市风，大骨架也能穿出高级感"
+        },
+        {
+          "handle": "橙子皮 🍊",
+          "profileUrl": "https://www.xiaohongshu.com/user/profile/5a99066411be102c6b6dc1c2",
+          "redId": "seapoacher",
+          "identityStatus": "profile_verified",
+          "checkedAt": "2026-09-21",
+          "styleIds": ["korean", "minimal", "office", "cleanfit"],
+          "cue": "简约气质挂，不费力时髦"
+        },
+        {
+          "handle": "秀逗汪星人",
+          "profileUrl": "https://www.xiaohongshu.com/user/profile/5b373e5811be106607ab949c",
+          "redId": "63590571438",
+          "identityStatus": "search_match",
+          "checkedAt": "2026-09-21",
+          "cue": "职场干练风，显腿长"
+        }
+      ]
+    },
+    {
+      "id": "korean_relaxed",
+      "name": "韩系松弛风",
+      "styleIds": [
+        "korean",
+        "soft",
+        "cleanfit"
+      ],
+      "creators": [
+        {
+          "handle": "知恩珍",
+          "profileUrl": "https://www.xiaohongshu.com/user/profile/5953687a5e87e73e5a4f7d44",
+          "redId": "zhen968",
+          "identityStatus": "search_match",
+          "checkedAt": "2026-09-21",
+          "cue": "慵懒随性，看着就很放松"
+        },
+        {
+          "handle": "黄绿豆",
+          "profileUrl": "https://www.xiaohongshu.com/user/profile/5aca2f644eacab17d122061c",
+          "redId": "huanglvdou123",
+          "identityStatus": "search_match",
+          "checkedAt": "2026-09-21",
+          "cue": "简约松弛，舒适耐看"
+        },
+        {
+          "handle": "sengyeon_8",
+          "profileUrl": "https://www.xiaohongshu.com/user/profile/5a59e63eb1da143b3dac6e21",
+          "redId": "yeahYeonn",
+          "identityStatus": "search_match",
+          "checkedAt": "2026-09-21",
+          "cue": "低饱和度，带有千禧年复古感"
+        },
+        {
+          "handle": "我是其琪呀-",
+          "profileUrl": "https://www.xiaohongshu.com/user/profile/654f33cb0000000004039aa6",
+          "redId": "8173188438",
+          "identityStatus": "search_match",
+          "checkedAt": "2026-09-21",
+          "cue": "ins风松弛感，低调耐看"
+        },
+        {
+          "handle": "干炸杏鲍菇",
+          "profileUrl": "https://www.xiaohongshu.com/user/profile/684a7f29000000001b01abee",
+          "redId": "ZConGgY_0616",
+          "identityStatus": "profile_verified",
+          "checkedAt": "2026-09-21",
+          "cue": "日常轻亚少女感，有个性"
+        },
+        {
+          "handle": "不知名秃头美女小孙",
+          "profileUrl": "https://www.xiaohongshu.com/user/profile/60d82598000000000100b61e",
+          "redId": "1158207625",
+          "identityStatus": "search_match",
+          "checkedAt": "2026-09-21",
+          "cue": "简约百搭，无色彩韩系"
+        }
+      ]
+    },
+    {
+      "id": "minimal_luxury",
+      "name": "极简高级风",
+      "styleIds": [
+        "minimal",
+        "cleanfit",
+        "office"
+      ],
+      "creators": [
+        {
+          "handle": "Paola Cossentino",
+          "platformHint": "instagram",
+          "cue": "法式复古轻奢御姐风，意式慵懒高级感"
+        },
+        {
+          "handle": "Mara Lafontan",
+          "platformHint": "instagram",
+          "cue": "法式慵懒性感，复古文艺"
+        },
+        {
+          "handle": "6J1A",
+          "profileUrl": "https://www.xiaohongshu.com/user/profile/5cf686730000000012003233",
+          "redId": "666J1A",
+          "identityStatus": "search_match",
+          "checkedAt": "2026-09-21",
+          "cue": "清冷简约，很有辨识度"
+        },
+        {
+          "handle": "kkmmmkk",
+          "platformHint": "instagram",
+          "cue": "韩系极简与轻欧美结合，性感但不低俗",
+          "profileUrl": "https://www.xiaohongshu.com/user/profile/67342ce1000000001d02c266",
+          "redId": "26285653013",
+          "identityStatus": "profile_verified_style_review",
+          "checkedAt": "2026-09-21",
+          "observedDisplayName": "kkmmmkk",
+          "verificationNote": "主页自述 Instagram 同名且常驻首尔；具体穿搭风格需从代表笔记继续核对"
+        },
+        {
+          "handle": "slow.and",
+          "platformHint": "instagram",
+          "cue": "用基础款打造松弛的知识分子气质"
+        }
+      ]
+    },
+    {
+      "id": "y2k",
+      "name": "Y2K／辣妹风",
+      "styleIds": [
+        "cool",
+        "street"
+      ],
+      "creators": [
+        {
+          "handle": "酷狗儿李来",
+          "profileUrl": "https://www.xiaohongshu.com/user/profile/5d3ea868000000001103c05a",
+          "redId": "49328402759",
+          "identityStatus": "search_match",
+          "checkedAt": "2026-09-21",
+          "cue": "可盐可甜的ins风辣妹"
+        },
+        {
+          "handle": "开去夏威夷",
+          "profileUrl": "https://www.xiaohongshu.com/user/profile/6571b596000000001902f9ec",
+          "redId": "6685892422",
+          "identityStatus": "search_match",
+          "checkedAt": "2026-09-21",
+          "cue": "轻亚甜酷的裤装女孩"
+        },
+        {
+          "handle": "彭彭不吃饭",
+          "profileUrl": "https://www.xiaohongshu.com/user/profile/57a346a67fc5b869366dd8f9",
+          "redId": "27247909409",
+          "identityStatus": "search_match",
+          "checkedAt": "2026-09-21",
+          "cue": "鬼马甜辣韩系，很有活力"
+        },
+        {
+          "handle": "南南尽",
+          "profileUrl": "https://www.xiaohongshu.com/user/profile/641bb1bf00000000120114ca",
+          "redId": "2213292735",
+          "identityStatus": "search_match",
+          "checkedAt": "2026-09-21",
+          "cue": "古早亚萌风，小个子友好"
+        },
+        {
+          "handle": "巧克力牙子",
+          "profileUrl": "https://www.xiaohongshu.com/user/profile/62392af40000000021024013",
+          "redId": "6579474667",
+          "identityStatus": "search_match",
+          "checkedAt": "2026-09-21",
+          "cue": "少女感视觉系，色彩丰富"
+        },
+        {
+          "handle": "金圓宝",
+          "profileUrl": "https://www.xiaohongshu.com/user/profile/6443e3f6000000000f00533f",
+          "redId": "4386308427",
+          "identityStatus": "search_match_needs_style_review",
+          "checkedAt": "2026-09-21",
+          "cue": "古早老钱与千禧辣妹结合",
+          "verificationNote": "同名账号较多；当前候选有穿搭笔记，但原风格描述待复核"
+        },
+        {
+          "handle": "先睡了",
+          "profileUrl": "https://www.xiaohongshu.com/user/profile/5fdc236000000000010073f3",
+          "redId": "Esther881119",
+          "identityStatus": "search_match",
+          "checkedAt": "2026-09-21",
+          "cue": "古早波西米亚感的高个子辣妹"
+        }
+      ]
+    },
+    {
+      "id": "new_chinese",
+      "name": "新中式",
+      "styleIds": [
+        "newchinese"
+      ],
+      "creators": [
+        {
+          "handle": "na",
+          "identityStatus": "unverified",
+          "cue": "贵气新中式，改良旗袍很有气质"
+        },
+        {
+          "handle": "小鹿弥雅",
+          "identityStatus": "profile_verified",
+          "cue": "温婉大小姐风，刺绣精致",
+          "profileUrl": "https://www.xiaohongshu.com/user/profile/603cd5c10000000001004752",
+          "redId": "49328354117",
+          "checkedAt": "2026-09-21",
+          "accountType": "brand",
+          "observedDisplayName": "CERFMIA小鹿弥雅",
+          "verificationNote": "品牌账号；主页与笔记确认新中式服饰内容"
+        },
+        {
+          "handle": "中国丝绸｜隆鹊",
+          "identityStatus": "profile_verified",
+          "accountTypeHint": "brand",
+          "cue": "官方账号，主打宋锦等高级面料",
+          "profileUrl": "https://www.xiaohongshu.com/user/profile/66d51a0a000000001d0218b2",
+          "redId": "94187814514",
+          "checkedAt": "2026-09-21",
+          "accountType": "brand",
+          "verificationNote": "品牌账号；主页自述新中式国潮品牌，笔记包含宋锦等东方服饰"
+        },
+        {
+          "handle": "東方",
+          "identityStatus": "unverified",
+          "cue": "黑金东方美学，充满古韵"
+        }
+      ]
+    },
+    {
+      "id": "western_retro",
+      "name": "欧美复古风",
+      "styleIds": [
+        "vintage",
+        "romantic"
+      ],
+      "creators": [
+        {
+          "handle": "Pandevour",
+          "identityStatus": "unverified",
+          "cue": "复古油画少女感，充满艺术气息"
+        },
+        {
+          "handle": "Desigual 大西瓜",
+          "identityStatus": "unverified",
+          "accountTypeHint": "brand",
+          "cue": "早秋复古配色，氛围感十足"
+        }
+      ]
+    },
+    {
+      "id": "french_relaxed",
+      "name": "法式慵懒风",
+      "styleIds": [
+        "french"
+      ],
+      "creators": [
+        {
+          "handle": "Kasstimmiko",
+          "platformHint": "instagram",
+          "cue": "经典、偏老钱风的穿搭，很会搭颜色"
+        },
+        {
+          "handle": "Camille_pidoux",
+          "platformHint": "instagram",
+          "cue": "风格自然，常用白色、黑色、咖啡色"
+        }
+      ]
+    },
+    {
+      "id": "original_design",
+      "name": "原创设计风",
+      "styleIds": [
+        "cool",
+        "street"
+      ],
+      "creators": [
+        {
+          "handle": "QiiQii",
+          "profileUrl": "https://www.xiaohongshu.com/user/profile/5a6c2dc24eacab1d0eca1745",
+          "redId": "Qi7729882",
+          "identityStatus": "search_match",
+          "checkedAt": "2026-09-21",
+          "cue": "原创设计单品，如铆钉、绑带等元素"
+        }
+      ]
+    },
+    {
+      "id": "intellectual",
+      "name": "智性静奢风",
+      "styleIds": [
+        "minimal",
+        "office",
+        "academia"
+      ],
+      "creators": [
+        {
+          "handle": "慢慢 Moran",
+          "identityStatus": "unverified",
+          "cue": "智性感穿搭，简单清爽并以配饰点缀"
+        }
+      ]
+    },
+    {
+      "id": "soft_sweet",
+      "name": "温柔甜美风",
+      "styleIds": [
+        "soft",
+        "romantic",
+        "date"
+      ],
+      "creators": [
+        {
+          "handle": "涂芷靓",
+          "profileUrl": "https://www.xiaohongshu.com/user/profile/63e9ca890000000026010788",
+          "redId": "5S2447253",
+          "identityStatus": "search_match",
+          "checkedAt": "2026-09-21",
+          "cue": "少女感减龄穿搭"
+        },
+        {
+          "handle": "我是阿卷呀",
+          "profileUrl": "https://www.xiaohongshu.com/user/profile/62a44e080000000021028374",
+          "redId": "5626661372",
+          "identityStatus": "search_match",
+          "checkedAt": "2026-09-21",
+          "cue": "小个子也能驾驭的贵气温柔风"
+        },
+        {
+          "handle": "小琳不长肉",
+          "profileUrl": "https://www.xiaohongshu.com/user/profile/663603700000000007007f7c",
+          "redId": "XiaoLinooo",
+          "identityStatus": "search_match",
+          "checkedAt": "2026-09-21",
+          "cue": "元气乖乖女，甜而不腻"
+        }
+      ]
+    }
+  ]
+}

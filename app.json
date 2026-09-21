@@ -1,0 +1,10 @@
+{
+  "pages": ["pages/index/index"],
+  "window": {
+    "navigationBarTitleText": "明日有解",
+    "navigationBarBackgroundColor": "#f5f2eb",
+    "navigationBarTextStyle": "black",
+    "backgroundColor": "#f5f2eb"
+  },
+  "style": "v2"
+}
