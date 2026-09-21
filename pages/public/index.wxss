@@ -294,3 +294,4 @@
 .zodiac-profile-grid { display: grid; grid-template-columns: 1fr; gap: 10rpx; }
 .zodiac-profile-grid view { display: flex; flex-direction: column; gap: 6rpx; padding: 18rpx; border: 1rpx solid #d9d1bf; border-radius: 10rpx; background: #fffdf8; color: #334b3d; font-size: 22rpx; line-height: 1.5; }
 .inline-note text { color: var(--accent); font-weight: 600; }
+.public-wardrobe-row { grid-template-columns: 1fr auto; }

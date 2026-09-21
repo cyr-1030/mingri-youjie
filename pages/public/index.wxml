@@ -160,11 +160,10 @@
       <view class="page-title">把常穿的单品放进来。</view>
       <view class="page-subtitle">方案会优先使用适合天气和场合的已有衣物。</view>
       <view class="profile-summary"><text>风格：{{styleText}}</text><text>星座偏好：{{zodiacName}}</text></view>
-      <view class="section-head"><text>我的衣橱</text><text class="muted">照片可选</text></view>
+      <view class="section-head"><text>我的衣橱</text><text class="muted">常穿单品</text></view>
       <view class="wardrobe-category-line"><text>物品分类</text><picker mode="multiSelector" range="{{wardrobeCategoryColumns}}" value="{{wardrobeCategoryIndices}}" bindcolumnchange="wardrobeCategoryColumnChange" bindchange="wardrobeCategory"><view class="category-picker">{{wardrobeCategoryGroup}} / {{wardrobeCategory}}　⌄</view></picker></view>
       <view class="wardrobe-add"><input placeholder="例如：米白衬衫、牛仔半裙" value="{{wardrobeName}}" bindinput="wardrobeName" maxlength="30" /><button bindtap="addWardrobe">添加物品</button></view>
-      <view class="wardrobe-photo-entry"><button bindtap="chooseWardrobePhoto">{{wardrobePhotoDraft ? '更换照片' : '添加照片'}}</button><image wx:if="{{wardrobePhotoDraft}}" src="{{wardrobePhotoDraft}}" mode="aspectFill"></image><text wx:if="{{wardrobePhotoDraft}}" bindtap="clearWardrobePhotoDraft">移除照片</text><text wx:else>照片方便搭配时快速辨认。</text></view>
-      <view class="wardrobe-row" wx:for="{{wardrobe}}" wx:key="id"><image wx:if="{{item.photo}}" src="{{item.photo}}" mode="aspectFill"></image><view wx:else class="wardrobe-no-photo">无图</view><view class="wardrobe-row-text"><text>{{item.category}} · {{item.name}}</text></view><button data-id="{{item.id}}" bindtap="removeWardrobe">删除</button></view>
+      <view class="wardrobe-row public-wardrobe-row" wx:for="{{wardrobe}}" wx:key="id"><view class="wardrobe-row-text"><text>{{item.category}} · {{item.name}}</text></view><button data-id="{{item.id}}" bindtap="removeWardrobe">删除</button></view>
       <view class="empty-wardrobe" wx:if="{{wardrobe.length === 0}}">先加一件常穿的衣服、鞋或配饰。</view>
       <view class="section-head wardrobe-gap-head"><text>以后想添置</text><text class="muted">按预算看三件</text></view>
       <view class="chip-row"><button class="chip {{wardrobeBudget === item ? 'active' : ''}}" wx:for="{{wardrobeBudgets}}" wx:key="*this" data-key="wardrobeBudget" data-value="{{item}}" bindtap="setField">{{item}}</button></view>

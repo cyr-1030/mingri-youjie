@@ -10,7 +10,7 @@ const DEFAULT = {
   city: '', forecast: null, forecastStatus: 'idle', forecastError: '', forecastFetchedAt: 0,
   environment: '室内为主', occasion: '日常', ageRange: '', zodiacSign: '',
   wardrobeBudget: '500 元内', styles: ['soft', 'french'], wardrobe: [],
-  wardrobeName: '', wardrobeCategory: '上装', wardrobePhotoDraft: ''
+  wardrobeName: '', wardrobeCategory: '上装'
 }
 const OCCASIONS = ['日常', '通勤', '约会', '上课', '聚会', '旅行', '居家']
 const WARDROBE_BUDGETS = ['200 元内', '500 元内', '1000 元内']
@@ -132,7 +132,7 @@ Page({
       forecastStatus: s.forecastStatus, forecastError: s.forecastError,
       environment: s.environment, occasion: s.occasion, wardrobeBudget: s.wardrobeBudget, ageRange: s.ageRange,
       styles, wardrobe: s.wardrobe, wardrobeGaps, wardrobeName: s.wardrobeName,
-      wardrobePhotoDraft: s.wardrobePhotoDraft, wardrobeCategory: s.wardrobeCategory,
+      wardrobeCategory: s.wardrobeCategory,
       wardrobeCategoryGroup: WARDROBE_GROUPS[wardrobeCategoryIndices[0]].name,
       wardrobeCategoryColumns: columnsForGroup(wardrobeCategoryIndices[0]), wardrobeCategoryIndices,
       styleText: plan ? plan.tags.join(' / ') : STYLES.filter(item => s.styles.includes(item.id)).map(item => item.name).join(' / '),
@@ -240,36 +240,17 @@ Page({
     this.setData({ wardrobeCategoryColumns: columnsForGroup(groupIndex), wardrobeCategoryIndices: [groupIndex, 0] })
   },
   wardrobeCategory(e) { this.state.wardrobeCategory = categoryAt(e.detail.value); this.refresh() },
-  chooseWardrobePhoto() {
-    const success = res => {
-      const file = (res.tempFiles || [])[0]
-      const path = file && (file.tempFilePath || file.path) || (res.tempFilePaths || [])[0]
-      if (!path) { wx.showToast({ title: '未能读取照片', icon: 'none' }); return }
-      if (file && file.size > 5 * 1024 * 1024) { wx.showToast({ title: '请选择 5 MB 内的照片', icon: 'none' }); return }
-      this.state.wardrobePhotoDraft = path; this.refresh()
-    }
-    const fail = error => { if (!/cancel/i.test(error && error.errMsg || '')) wx.showToast({ title: '选择照片失败', icon: 'none' }) }
-    if (wx.chooseMedia) wx.chooseMedia({ count: 1, mediaType: ['image'], sourceType: ['album', 'camera'], success, fail })
-    else wx.chooseImage({ count: 1, sourceType: ['album', 'camera'], success, fail })
-  },
-  clearWardrobePhotoDraft() { this.state.wardrobePhotoDraft = ''; this.refresh() },
   addWardrobe() {
     const name = this.state.wardrobeName.trim()
     if (!name) { wx.showToast({ title: '先写物品名称', icon: 'none' }); return }
-    if (this.addingWardrobe) return
-    const category = this.state.wardrobeCategory; const draft = this.state.wardrobePhotoDraft
-    const commit = photo => {
-      this.state.wardrobe.push({ id: `item-${Date.now()}-${Math.floor(Math.random() * 10000)}`, name, category, photo })
-      this.state.wardrobeName = ''; this.state.wardrobePhotoDraft = ''; this.addingWardrobe = false; this.refresh()
-    }
-    if (!draft) { commit(''); return }
-    this.addingWardrobe = true
-    wx.saveFile({ tempFilePath: draft, success: res => commit(res.savedFilePath), fail: () => { this.addingWardrobe = false; wx.showToast({ title: '照片保存失败，请重试', icon: 'none' }) } })
+    this.state.wardrobe.push({ id: `item-${Date.now()}-${Math.floor(Math.random() * 10000)}`,
+      name, category: this.state.wardrobeCategory, photo: '' })
+    this.state.wardrobeName = ''
+    this.refresh()
   },
   removeWardrobe(e) {
-    const id = String(e.currentTarget.dataset.id); const removed = this.state.wardrobe.find(item => String(item.id) === id)
+    const id = String(e.currentTarget.dataset.id)
     this.state.wardrobe = this.state.wardrobe.filter(item => String(item.id) !== id)
-    if (removed && removed.photo && wx.removeSavedFile) wx.removeSavedFile({ filePath: removed.photo, fail: () => {} })
     this.refresh()
   },
   copyWardrobeGap(e) {
