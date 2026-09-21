@@ -1,7 +1,9 @@
 {
-  "pages": ["pages/index/index"],
+  "pages": [
+    "pages/public/index"
+  ],
   "window": {
-    "navigationBarTitleText": "明日有解",
+    "navigationBarTitleText": "心选明日",
     "navigationBarBackgroundColor": "#f5f2eb",
     "navigationBarTextStyle": "black",
     "backgroundColor": "#f5f2eb"

@@ -1,6 +1,6 @@
 {
   "appid": "wx39c04aac5a0ef8c9",
-  "projectname": "明日有解-MVP",
+  "projectname": "心选明日-微信版",
   "compileType": "miniprogram",
   "miniprogramRoot": "./",
   "cloudfunctionRoot": "cloudfunctions/",
@@ -29,7 +29,140 @@
   },
   "simulatorPluginLibVersion": {},
   "packOptions": {
-    "ignore": [],
+    "ignore": [
+      {
+        "type": "folder",
+        "value": "preview"
+      },
+      {
+        "type": "folder",
+        "value": "pages/index"
+      },
+      {
+        "type": "folder",
+        "value": "tests"
+      },
+      {
+        "type": "folder",
+        "value": "scripts"
+      },
+      {
+        "type": "file",
+        "value": "index.html"
+      },
+      {
+        "type": "file",
+        "value": "privacy.html"
+      },
+      {
+        "type": "file",
+        "value": "lib/calendar.js"
+      },
+      {
+        "type": "file",
+        "value": "lib/daily.js"
+      },
+      {
+        "type": "file",
+        "value": "lib/astrology.js"
+      },
+      {
+        "type": "file",
+        "value": "lib/astronomy.js"
+      },
+      {
+        "type": "file",
+        "value": "lib/astro-guidance.js"
+      },
+      {
+        "type": "file",
+        "value": "lib/inspiration.js"
+      },
+      {
+        "type": "file",
+        "value": "lib/creator-match.js"
+      },
+      {
+        "type": "file",
+        "value": "data/inspiration-notes.js"
+      },
+      {
+        "type": "file",
+        "value": "data/creators.js"
+      },
+      {
+        "type": "folder",
+        "value": "docs"
+      },
+      {
+        "type": "folder",
+        "value": "node_modules"
+      },
+      {
+        "type": "file",
+        "value": "README.md"
+      },
+      {
+        "type": "file",
+        "value": "package.json"
+      },
+      {
+        "type": "file",
+        "value": "package-lock.json"
+      },
+      {
+        "type": "file",
+        "value": "assets/object-sheet-1.jpg"
+      },
+      {
+        "type": "file",
+        "value": "assets/object-sheet-2.jpg"
+      },
+      {
+        "type": "file",
+        "value": "assets/object-sheet-3.jpg"
+      },
+      {
+        "type": "file",
+        "value": "lib/elements.js"
+      },
+      {
+        "type": "file",
+        "value": "lib/lunar.js"
+      },
+      {
+        "type": "file",
+        "value": "lib/LUNAR-LICENSE.txt"
+      },
+      {
+        "type": "file",
+        "value": "data/content.json"
+      },
+      {
+        "type": "file",
+        "value": "data/creator-candidates.json"
+      },
+      {
+        "type": "file",
+        "value": "data/curated-creator-sources.json"
+      },
+      {
+        "type": "file",
+        "value": "data/inspiration-notes.json"
+      },
+      {
+        "type": "file",
+        "value": "data/source-verification.md"
+      },
+      {
+        "type": "file",
+        "value": "data/style-guides.js"
+      },
+      {
+        "type": "file",
+        "value": "data/verified-creators.js"
+      }
+    ],
     "include": []
   },
   "editorSetting": {}

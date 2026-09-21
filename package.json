@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "test": "node --test tests/*.test.js",
-    "check": "npm test && node --check pages/index/index.js && node --check cloudfunctions/getForecast/index.js && node --check cloudfunctions/getForecast/weather.js"
+    "check": "npm test && node --check pages/index/index.js && node --check pages/public/index.js && node --check lib/zodiac-preference.js && node --check cloudfunctions/getForecast/index.js && node --check cloudfunctions/getForecast/weather.js"
   },
   "dependencies": {
     "astronomy-engine": "2.1.19",

@@ -1,0 +1,177 @@
+<view class="app theme-neutral">
+  <view class="topbar">
+    <text class="brand">心选明日</text>
+    <text class="topnote">心理选择 × 穿搭</text>
+  </view>
+
+  <view class="body">
+    <block wx:if="{{page === 'home'}}">
+      <view class="eyebrow">DAILY STYLE CHECK</view>
+      <view class="day-toggle">
+        <button class="{{dateMode === 'today' ? 'selected' : ''}}" data-value="today" bindtap="setDateMode">今天</button>
+        <button class="{{dateMode === 'tomorrow' ? 'selected' : ''}}" data-value="tomorrow" bindtap="setDateMode">明天</button>
+      </view>
+      <view class="hero public-hero">
+        <view class="hero-ring ring-a"></view><view class="hero-ring ring-b"></view>
+        <view class="hero-star">✦</view><view class="hero-sigil">选</view>
+        <view class="hero-content">
+          <text class="hero-kicker">{{targetDate}} · 心选测试</text>
+          <text class="hero-title">今天，最在意哪件事？</text>
+          <text class="hero-subtitle">做三个选择，整理心情和明日穿搭。</text>
+        </view>
+      </view>
+      <view class="section-head"><text>选一个主题</text><text class="muted">从此刻的关注出发</text></view>
+      <view class="theme-grid">
+        <view class="theme-tile" wx:for="{{themes}}" wx:key="id" data-id="{{item.id}}" bindtap="beginTheme" role="button" aria-label="{{item.name}}" hover-class="theme-tile-pressed">
+          <text class="theme-index">{{item.index}}</text><text class="theme-icon">{{item.icon}}</text><text class="theme-name">{{item.name}}</text>
+        </view>
+      </view>
+      <view class="small-note">三道心理选择 · 第一眼选物 · 行动与穿搭建议</view>
+    </block>
+
+    <block wx:elif="{{page === 'quiz'}}">
+      <view class="eyebrow">{{theme.icon}} {{theme.name}} · 第 {{qIndex + 1}} / 3 题</view>
+      <view class="progress"><view style="width:{{progress}}%"></view></view>
+      <view class="scene-orb"><text>{{qIndex === 0 ? '☼' : qIndex === 1 ? '☾' : '✧'}}</text></view>
+      <view class="page-title">{{questionText}}</view>
+      <view class="page-subtitle">想象画面，按第一反应选择。</view>
+      <view class="option-stack">
+        <button class="option {{item.selected ? 'chosen' : ''}}" wx:for="{{questionOptions}}" wx:key="index" data-index="{{item.index}}" bindtap="answer">
+          <text class="option-mark">{{item.selected ? '✓' : '○'}}</text><text>{{item.text}}</text>
+        </button>
+      </view>
+      <button class="primary" disabled="{{!canAdvance}}" bindtap="nextQuestion">{{qIndex === 2 ? '去选一件物品 →' : '下一题 →'}}</button>
+      <button class="text-button" bindtap="previousQuestion">← {{qIndex === 0 ? '换个主题' : '上一题'}}</button>
+    </block>
+
+    <block wx:elif="{{page === 'draw'}}">
+      <view class="eyebrow">{{theme.name}} · 第一眼选择</view>
+      <view class="page-title">你想靠近哪一件？</view>
+      <view class="page-subtitle">不用分析，选择第一眼吸引你的物品。</view>
+      <view class="object-grid">
+        <button class="object-card" wx:for="{{objects}}" wx:key="index" data-index="{{item.index}}" bindtap="chooseObject" aria-label="选择{{item.name}}">
+          <view class="object-frame"><image class="object-image" src="{{item.tileSrc}}" mode="aspectFill"></image></view>
+          <text class="object-num">NO. {{item.index + 1}}</text>
+        </button>
+      </view>
+      <view class="small-note">没有标准答案，选择后会看到对应的心理线索。</view>
+      <button class="text-button" bindtap="previousQuestion">← 返回上一题</button>
+    </block>
+
+    <block wx:elif="{{page === 'reading'}}">
+      <view class="eyebrow">{{theme.name}} · 你的选择</view>
+      <view class="reading-card public-reading-card">
+        <view class="reading-top"><text>YOUR CHOICE</text><text>✦</text></view>
+        <view class="reading-symbol">{{reading.object.symbol}}</view>
+        <view class="reading-title">{{reading.title}}</view>
+        <view class="reading-caption">你先被「{{reading.object.name}}」吸引</view>
+      </view>
+      <view class="insight-card"><text class="card-label">你的心理线索</text><text class="insight-large">{{reading.summary}}</text><text class="insight-detail">此刻更需要：{{reading.wants}}</text></view>
+      <view class="action-grid">
+        <view class="action-card"><text class="card-label">先做</text><text>{{reading.do}}</text></view>
+        <view class="action-card"><text class="card-label">遇到变化</text><text>{{reading.reacts}}</text></view>
+        <view class="action-card"><text class="card-label">暂缓</text><text>{{reading.avoid}}</text></view>
+      </view>
+      <button class="primary" data-page="conditions" bindtap="navigate">补充天气与场合 →</button>
+    </block>
+
+    <block wx:elif="{{page === 'conditions'}}">
+      <view class="eyebrow">让建议更贴近生活</view>
+      <view class="page-title">再补充几个条件。</view>
+      <view class="page-subtitle">城市、场合和个人偏好会一起影响穿搭。</view>
+      <view class="field">
+        <text class="field-label">当前所在城市</text>
+        <picker mode="multiSelector" range="{{currentRegionColumns}}" value="{{currentRegionIndices}}" bindcolumnchange="currentRegionColumnChange" bindchange="currentRegionChange" bindcancel="currentRegionCancel">
+          <view class="picker-field region-picker">{{currentRegionLabel || '选择省份或地区、城市'}}<text>⌄</text></view>
+        </picker>
+        <text class="field-hint">选择后会自动更新目标日期的天气。</text>
+      </view>
+      <view class="forecast-card" wx:if="{{city}}">
+        <text class="card-label">{{targetDate}} · 当地预报</text>
+        <text wx:if="{{forecastStatus === 'loading'}}">正在更新天气…</text>
+        <block wx:elif="{{forecast && forecastStatus === 'ready'}}">
+          <text class="forecast-main">{{forecast.description}} · {{forecast.tempMin}}–{{forecast.tempMax}}°C</text>
+          <text class="forecast-detail">{{weatherFactors}}</text><text class="weather-attribution">{{forecast.attribution}}</text>
+        </block>
+        <text wx:else>天气暂未更新，仍可先生成方案。</text>
+      </view>
+      <view class="field"><text class="field-label">场合</text><view class="chip-row"><button class="chip {{occasion === item ? 'active' : ''}}" wx:for="{{occasions}}" wx:key="*this" data-key="occasion" data-value="{{item}}" bindtap="setField">{{item}}</button></view></view>
+      <view class="field"><text class="field-label">活动环境</text><view class="chip-row"><button class="chip {{environment === item ? 'active' : ''}}" wx:for="{{environments}}" wx:key="*this" data-key="environment" data-value="{{item}}" bindtap="setField">{{item}}</button></view></view>
+      <view class="field"><text class="field-label">年龄段 · 可跳过</text><view class="chip-row"><button class="chip {{ageRange === item ? 'active' : ''}}" wx:for="{{ageRanges}}" wx:key="*this" data-key="ageRange" data-value="{{item}}" bindtap="setField">{{item}}</button></view></view>
+      <view class="field"><text class="field-label">喜欢的风格 · 选 1–3 个</text><view class="style-grid"><button class="style-chip {{item.selected ? 'active' : ''}}" wx:for="{{styles}}" wx:key="id" data-id="{{item.id}}" bindtap="toggleStyle"><text>{{item.name}}</text><text class="style-mood">{{item.mood}}</text></button></view></view>
+      <view class="inline-note">星座偏好：{{zodiacName}}　<text data-page="zodiac" bindtap="navigate">去选择 →</text></view>
+      <button class="primary" bindtap="goPlan">生成穿搭方案 →</button>
+    </block>
+
+    <block wx:elif="{{page === 'zodiac'}}">
+      <view class="eyebrow">个性偏好</view>
+      <view class="page-title">选择你的星座。</view>
+      <view class="page-subtitle">用于补充穿搭细节和行动节奏；随时可以更换。</view>
+      <view class="zodiac-grid">
+        <button class="zodiac-card {{item.selected ? 'active' : ''}}" wx:for="{{zodiacSigns}}" wx:key="id" data-id="{{item.id}}" bindtap="chooseZodiac">
+          <text class="zodiac-symbol">{{item.symbol}}</text><text>{{item.name}}</text>
+        </button>
+      </view>
+      <view class="zodiac-profile" wx:if="{{zodiacProfile}}">
+        <view class="zodiac-profile-head"><text>{{zodiacProfile.symbol}}</text><text>{{zodiacProfile.name}}</text></view>
+        <text class="zodiac-summary">{{zodiacProfile.summary}}</text>
+        <view class="zodiac-profile-grid">
+          <view><text class="card-label">穿搭细节</text><text>{{zodiacProfile.styleCue}}</text></view>
+          <view><text class="card-label">妆容重点</text><text>{{zodiacProfile.beautyCue}}</text></view>
+          <view><text class="card-label">行动节奏</text><text>{{zodiacProfile.actionCue}}</text></view>
+        </view>
+      </view>
+      <button class="primary" wx:if="{{reading}}" data-page="conditions" bindtap="navigate">继续完善穿搭 →</button>
+    </block>
+
+    <block wx:elif="{{page === 'plan'}}">
+      <view class="eyebrow">{{theme.name}} · {{targetDate}}</view>
+      <view class="page-title">照着准备就好。</view>
+      <view class="plan-heading" wx:if="{{plan}}">
+        <text class="plan-name">{{plan.title}}</text><text class="plan-mood">{{plan.mood}}</text>
+        <text class="plan-context">{{city || '城市未选'}} · {{plan.weatherText}} · {{occasion}} · {{environment}}</text>
+      </view>
+      <view class="plan-summary-grid" wx:if="{{plan}}">
+        <view class="plan-summary-card"><text class="card-label">心理线索</text><text>{{reading.summary}}</text></view>
+        <view class="plan-summary-card"><text class="card-label">场合重点</text><text>{{plan.focus}}</text></view>
+        <view class="plan-summary-card"><text class="card-label">个性偏好</text><text>{{zodiacProfile ? zodiacProfile.actionCue : '按测试选择与实际条件生成'}}</text></view>
+      </view>
+      <view class="outfit-board" wx:if="{{plan}}">
+        <view class="outfit-board-head"><text>今天穿什么</text><text>{{plan.items.length}} 件</text></view>
+        <view class="outfit-grid">
+          <view class="outfit-tile" wx:for="{{plan.items}}" wx:key="label">
+            <image wx:if="{{item.photo}}" src="{{item.photo}}" mode="aspectFill"></image><view wx:else class="outfit-empty">{{item.label}}</view>
+            <view class="outfit-caption"><text>{{item.value}}</text><text>{{item.owned ? '衣橱已有' : '搭配参考'}}</text></view>
+          </view>
+        </view>
+      </view>
+      <view class="plan-guide-grid" wx:if="{{plan}}">
+        <view class="plan-guide-card"><text class="card-label">怎么穿</text><text>{{plan.styling}}</text></view>
+        <view class="plan-guide-card"><text class="card-label">妆容与发型</text><text>{{plan.makeup}}；{{plan.hair}}</text></view>
+        <view class="plan-guide-card"><text class="card-label">出门提醒</text><text>{{plan.reminder}}</text></view>
+      </view>
+      <view class="section-head" wx:if="{{plan}}"><text>准备清单</text><text class="muted">今晚照着做</text></view>
+      <view class="prep-grid" wx:if="{{plan}}"><view class="prep-card" wx:for="{{plan.prep}}" wx:key="*this"><text class="prep-index">0{{index + 1}}</text><text>{{item}}</text></view></view>
+      <button class="primary" data-page="conditions" bindtap="navigate">调整条件与风格</button>
+    </block>
+
+    <block wx:elif="{{page === 'profile'}}">
+      <view class="eyebrow">衣橱与偏好</view>
+      <view class="page-title">把常穿的单品放进来。</view>
+      <view class="page-subtitle">方案会优先使用适合天气和场合的已有衣物。</view>
+      <view class="profile-summary"><text>风格：{{styleText}}</text><text>星座偏好：{{zodiacName}}</text></view>
+      <view class="section-head"><text>我的衣橱</text><text class="muted">照片可选</text></view>
+      <view class="wardrobe-category-line"><text>物品分类</text><picker mode="multiSelector" range="{{wardrobeCategoryColumns}}" value="{{wardrobeCategoryIndices}}" bindcolumnchange="wardrobeCategoryColumnChange" bindchange="wardrobeCategory"><view class="category-picker">{{wardrobeCategoryGroup}} / {{wardrobeCategory}}　⌄</view></picker></view>
+      <view class="wardrobe-add"><input placeholder="例如：米白衬衫、牛仔半裙" value="{{wardrobeName}}" bindinput="wardrobeName" maxlength="30" /><button bindtap="addWardrobe">添加物品</button></view>
+      <view class="wardrobe-photo-entry"><button bindtap="chooseWardrobePhoto">{{wardrobePhotoDraft ? '更换照片' : '添加照片'}}</button><image wx:if="{{wardrobePhotoDraft}}" src="{{wardrobePhotoDraft}}" mode="aspectFill"></image><text wx:if="{{wardrobePhotoDraft}}" bindtap="clearWardrobePhotoDraft">移除照片</text><text wx:else>照片方便搭配时快速辨认。</text></view>
+      <view class="wardrobe-row" wx:for="{{wardrobe}}" wx:key="id"><image wx:if="{{item.photo}}" src="{{item.photo}}" mode="aspectFill"></image><view wx:else class="wardrobe-no-photo">无图</view><view class="wardrobe-row-text"><text>{{item.category}} · {{item.name}}</text></view><button data-id="{{item.id}}" bindtap="removeWardrobe">删除</button></view>
+      <view class="empty-wardrobe" wx:if="{{wardrobe.length === 0}}">先加一件常穿的衣服、鞋或配饰。</view>
+      <view class="section-head wardrobe-gap-head"><text>以后想添置</text><text class="muted">按预算看三件</text></view>
+      <view class="chip-row"><button class="chip {{wardrobeBudget === item ? 'active' : ''}}" wx:for="{{wardrobeBudgets}}" wx:key="*this" data-key="wardrobeBudget" data-value="{{item}}" bindtap="setField">{{item}}</button></view>
+      <view class="wardrobe-gap-grid"><view class="wardrobe-gap-card" wx:for="{{wardrobeGaps}}" wx:key="id"><text class="wardrobe-gap-index">0{{index + 1}}</text><text class="wardrobe-gap-category">{{item.category}} · {{item.price}}</text><text class="wardrobe-gap-name">{{item.name}}</text><button data-id="{{item.id}}" bindtap="copyWardrobeGap">复制搜索词</button></view></view>
+      <view class="empty-wardrobe wardrobe-gap-empty" wx:if="{{wardrobeGaps.length === 0}}">现在的衣橱已经够用。</view>
+    </block>
+  </view>
+
+  <view class="bottom-nav public-nav"><button class="nav-item {{item.active ? 'active' : ''}}" wx:for="{{nav}}" wx:key="id" data-page="{{item.id}}" bindtap="navigate"><text class="nav-icon">{{item.icon}}</text><text>{{item.name}}</text></button></view>
+</view>
